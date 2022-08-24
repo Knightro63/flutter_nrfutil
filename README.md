@@ -1,4 +1,4 @@
-# nrfutil
+# flutter_nrfutil
 
 A Flutter plugin to create nRF DFU packages with signing for DFU updates on nRF51 and nRF52 devices. This plugin also can generate key for signing DFU packages and c code that is used on the device for verification.
 
