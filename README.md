@@ -15,7 +15,7 @@ A DFU package is able to consist of standalone firmware options e.g.(application
 ### Generate a nRF DFU package
 Generates an archived package as a Uint8List.
 ```dart
-Uint8List package =  NRFUTIL(
+Uint8List package =  await NRFUTIL(
     applicationFirmware: applicationFirmware,
     softDeviceFirmware: softDeviceFirmware,
     hardwareVersion: hwVersion,
@@ -30,7 +30,7 @@ Generates an archived package as a Uint8List.
 
 Key generation is able to provide a private key in pem form, but the public key is able to be in either pem or code e.g.(c) form. To change the public key export type to pem add publicKeyType: SigningKeyType.pem.
 ```dart
-Uint8List package =  Signing().generateKey();
+Uint8List package =  await Signing().generateKey();
 ```
 
 ## Contributing
