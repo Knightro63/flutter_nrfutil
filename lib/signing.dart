@@ -32,6 +32,9 @@ class Signing{
         loadPrivateKeyFromBytes(privateKey);
       }
     }
+    else{
+      loadPrivateKeyFromPem();
+    }
 
     if(publicKey != null){
       if(publicKey is String){
@@ -104,7 +107,7 @@ __ALIGN(4) const uint8_t pk[64] ={
     );
     return Uint8List.fromList(bytes!);
   }
-  void loadPrivateKeyFromPem(String? key){
+  void loadPrivateKeyFromPem([String? key]){
     signingKey.privateKey = key == null?CryptoUtils.ecPrivateKeyFromPem(defaultKey):CryptoUtils.ecPrivateKeyFromPem(key);
   }
   void loadPrivateKeyFromBytes(Uint8List? bytes){
@@ -139,7 +142,13 @@ __ALIGN(4) const uint8_t pk[64] ={
     return data;
   }
   bool verify(Uint8List signedData){
-    if(!signingKey.hasSignature || !signingKey.hasPublicKey) throw Exception("Can't save key. No key created/loaded");
-    return CryptoUtils.ecVerify(signingKey.publicKey!, signedData, signingKey.signature!, algorithm: 'SHA-256/ECDSA');
+    if(!signingKey.hasSignature || !signingKey.hasPublicKey){ 
+      //throw Exception("Can't save key. No key created/loaded");
+      print('Unable to verify! No Public Key Provided!');
+      return false;
+    }
+    else{
+      return CryptoUtils.ecVerify(signingKey.publicKey!, signedData, signingKey.signature!, algorithm: 'SHA-256/ECDSA');
+    }
   }
 }
