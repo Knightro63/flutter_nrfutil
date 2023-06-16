@@ -42,6 +42,10 @@ Key generation is able to provide a private key in pem form, but the public key 
 Uint8List package =  await Signing().generateKey();
 ```
 
+## Example
+
+Find the example for this API [here](https://github.com/Knightro63/flutter_nrfutil/tree/main/example/nrfutil_example/lib/main.dart).
+
 ## Contributing
 
 Contributions are welcome.
