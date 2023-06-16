@@ -1,11 +1,11 @@
 name: nrfutil
-description: A new Flutter package project.
-version: 0.0.2
+description: A Flutter plugin to create nRF DFU packages with signing for DFU updates on nRF51 and nRF52 devices.
+version: 0.0.1
 repository: https://github.com/Knightro63/flutter_nrfutil
 
 environment:
   sdk: ">=2.17.6 <3.0.0"
-  flutter: ">=1.17.0"
+  flutter: ">=1.20.0"
 
 dependencies:
   flutter:

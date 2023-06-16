@@ -3,8 +3,9 @@ import 'dart:convert';
 
 import 'package:archive/archive_io.dart';
 import 'package:crypto/crypto.dart';
+import 'package:flutter/foundation.dart';
 
-import 'initPacket.dart';
+import 'init_packet.dart';
 import 'intelhex.dart';
 import 'signing.dart';
 
@@ -130,11 +131,13 @@ class NRFUTIL{
       if(keyFile != null){
         String keyString = keyFile!;
         signer = Signing(privateKey: keyString);
-        if(keyString == signer!.defaultKey) print("Warning your key file is compromised, please generate a new key for signing!");
+        if(keyString == signer!.defaultKey){ 
+          debugPrint("Warning your key file is compromised, please generate a new key for signing!");
+        }
       }
       else{
         signer = Signing();
-        print("Warning you are using a default key which is compromised!");
+        debugPrint("Warning you are using a default key which is compromised!");
       }
     }
 

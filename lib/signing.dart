@@ -1,6 +1,7 @@
 import 'package:basic_utils/basic_utils.dart';
 import 'dart:typed_data';
 import 'package:archive/archive_io.dart';
+import 'package:flutter/foundation.dart';
 
 enum SigningKeyType{code,pem}
 
@@ -132,11 +133,11 @@ __ALIGN(4) const uint8_t pk[64] ={
 
   ByteData bigIntToByteData(BigInt bigInt) {
     final data = ByteData((bigInt.bitLength / 8).ceil());
-    BigInt _bigInt = bigInt;
+    BigInt newBigInt = bigInt;
 
     for (int i = 1; i <= data.lengthInBytes; i++) {
-      data.setUint8(data.lengthInBytes - i, _bigInt.toUnsigned(8).toInt());
-      _bigInt = _bigInt >> 8;
+      data.setUint8(data.lengthInBytes - i, newBigInt.toUnsigned(8).toInt());
+      newBigInt = newBigInt >> 8;
     }
 
     return data;
@@ -144,7 +145,7 @@ __ALIGN(4) const uint8_t pk[64] ={
   bool verify(Uint8List signedData){
     if(!signingKey.hasSignature || !signingKey.hasPublicKey){ 
       //throw Exception("Can't save key. No key created/loaded");
-      print('Unable to verify! No Public Key Provided!');
+      debugPrint('Unable to verify! No Public Key Provided!');
       return false;
     }
     else{

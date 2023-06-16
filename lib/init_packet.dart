@@ -36,17 +36,15 @@ class InitPacket{
     else{
       //construct from input variables
       bootValidation = [];
-      int i = 0;
-      bootValidationType!.forEach((x) {
+      for(int i = 0; i < bootValidationType!.length;i++){
+        ValidationType x = bootValidationType![i];
         bootValidation!.add(
           pb.BootValidation(
             type: x, 
             bytes: bootValidationBytes![i]
           )
         );
-        i++;
-      });
-
+      }
       //By default, set the packet's command to an unsigned command
       //If a signature is set (via setSignature), this will get overwritten
       //with an instance of SignedCommand instead.
