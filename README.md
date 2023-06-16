@@ -1,6 +1,15 @@
 # nrfutil
 
+[![Pub Version](https://img.shields.io/pub/v/oimo_physics)](https://pub.dev/packages/nrfutil)
+[![analysis](https://github.com/Knightro63/apple_vision/actions/workflows/flutter.yml/badge.svg)](https://github.com/Knightro63/flutter_nrfutil/actions/)
+[![Star on Github](https://img.shields.io/github/stars/Knightro63/apple_vision.svg?style=flat&logo=github&colorB=deeppink&label=stars)](https://github.com/Knightro63/flutter_nrfutil)
+[![License: BSD](https://img.shields.io/badge/license-BSD-purple.svg)](https://opensource.org/licenses/BSD)
+
 A Flutter plugin to create nRF DFU packages with signing for DFU updates on nRF51 and nRF52 devices. This plugin also can generate key for signing DFU packages and c code that is used on the device for verification.
+
+**PLEASE READ THIS** before continuing or posting a [new issue](https://github.com/Knightro63/flutter_nrfutil):
+
+- This plugin is not sponsor or maintained by [Nordic Semiconductor](https://www.nordicsemi.com/Support/Documentation). The [authors](https://github.com/Knightro63/apple_vision/blob/main/AUTHORS) are developers who wanted to make it easier to create dfu packets for nrf devices.
 
 ## Getting started
 
@@ -35,7 +44,10 @@ Uint8List package =  await Signing().generateKey();
 
 ## Contributing
 
-Feel free to propose changes by creating a pull request.
+Contributions are welcome.
+In case of any problems look at [existing issues](https://github.com/Knightro63/oimo_physics/issues), if you cannot find anything related to your problem then open an issue.
+Create an issue before opening a [pull request](https://github.com/Knightro63/oimo_physics/pulls) for non trivial fixes.
+In case of trivial fixes open a [pull request](https://github.com/Knightro63/oimo_physics/pulls) directly.
 
 ## Additional Information
 

@@ -1,5 +1,4 @@
 import 'package:basic_utils/basic_utils.dart';
-import 'dart:typed_data';
 import 'package:archive/archive_io.dart';
 import 'package:flutter/foundation.dart';
 

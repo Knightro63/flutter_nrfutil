@@ -54,7 +54,7 @@ class _NRFUtilWidgetState extends State<NRFUtilWidget> {
   String? softDeviceFirmware;
   String? key;
 
-  SoftDeviceTypes sdReq = SoftDeviceTypes.s132_nrf52_611;//0xB7;
+  SoftDeviceTypes sdReq = SoftDeviceTypes.s132NRF52d611;//0xB7;
   String error = '';
   late List<DropdownMenuItem<SoftDeviceTypes>> sdDropDown;
   late double deviceWidth;

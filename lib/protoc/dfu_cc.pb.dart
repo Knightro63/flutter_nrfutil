@@ -24,14 +24,14 @@ class Hash extends $pb.GeneratedMessage {
     HashType? hashType,
     $core.List<$core.int>? hash,
   }) {
-    final _result = create();
+    final result = create();
     if (hashType != null) {
-      _result.hashType = hashType;
+      result.hashType = hashType;
     }
     if (hash != null) {
-      _result.hash = hash;
+      result.hash = hash;
     }
-    return _result;
+    return result;
   }
   factory Hash.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory Hash.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -84,14 +84,14 @@ class BootValidation extends $pb.GeneratedMessage {
     ValidationType? type,
     $core.List<$core.int>? bytes,
   }) {
-    final _result = create();
+    final result = create();
     if (type != null) {
-      _result.type = type;
+      result.type = type;
     }
     if (bytes != null) {
-      _result.bytes = bytes;
+      result.bytes = bytes;
     }
-    return _result;
+    return result;
   }
   factory BootValidation.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory BootValidation.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -160,38 +160,38 @@ class InitCommand extends $pb.GeneratedMessage {
     $core.bool? isDebug,
     $core.Iterable<BootValidation>? bootValidation,
   }) {
-    final _result = create();
+    final result = create();
     if (fwVersion != null) {
-      _result.fwVersion = fwVersion;
+      result.fwVersion = fwVersion;
     }
     if (hwVersion != null) {
-      _result.hwVersion = hwVersion;
+      result.hwVersion = hwVersion;
     }
     if (sdReq != null) {
-      _result.sdReq.addAll(sdReq);
+      result.sdReq.addAll(sdReq);
     }
     if (type != null) {
-      _result.type = type;
+      result.type = type;
     }
     if (sdSize != null) {
-      _result.sdSize = sdSize;
+      result.sdSize = sdSize;
     }
     if (blSize != null) {
-      _result.blSize = blSize;
+      result.blSize = blSize;
     }
     if (appSize != null) {
-      _result.appSize = appSize;
+      result.appSize = appSize;
     }
     if (hash != null) {
-      _result.hash = hash;
+      result.hash = hash;
     }
     if (isDebug != null) {
-      _result.isDebug = isDebug;
+      result.isDebug = isDebug;
     }
     if (bootValidation != null) {
-      _result.bootValidation.addAll(bootValidation);
+      result.bootValidation.addAll(bootValidation);
     }
-    return _result;
+    return result;
   }
   factory InitCommand.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory InitCommand.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -304,11 +304,11 @@ class ResetCommand extends $pb.GeneratedMessage {
   factory ResetCommand({
     $core.int? timeout,
   }) {
-    final _result = create();
+    final result = create();
     if (timeout != null) {
-      _result.timeout = timeout;
+      result.timeout = timeout;
     }
-    return _result;
+    return result;
   }
   factory ResetCommand.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory ResetCommand.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -354,17 +354,17 @@ class Command extends $pb.GeneratedMessage {
     InitCommand? init,
     ResetCommand? reset,
   }) {
-    final _result = create();
+    final result = create();
     if (opCode != null) {
-      _result.opCode = opCode;
+      result.opCode = opCode;
     }
     if (init != null) {
-      _result.init = init;
+      result.init = init;
     }
     if (reset != null) {
-      _result.reset = reset;
+      result.reset = reset;
     }
-    return _result;
+    return result;
   }
   factory Command.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory Command.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -432,17 +432,17 @@ class SignedCommand extends $pb.GeneratedMessage {
     SignatureType? signatureType,
     $core.List<$core.int>? signature,
   }) {
-    final _result = create();
+    final result = create();
     if (command != null) {
-      _result.command = command;
+      result.command = command;
     }
     if (signatureType != null) {
-      _result.signatureType = signatureType;
+      result.signatureType = signatureType;
     }
     if (signature != null) {
-      _result.signature = signature;
+      result.signature = signature;
     }
-    return _result;
+    return result;
   }
   factory SignedCommand.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory SignedCommand.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -506,14 +506,14 @@ class Packet extends $pb.GeneratedMessage {
     Command? command,
     SignedCommand? signedCommand,
   }) {
-    final _result = create();
+    final result = create();
     if (command != null) {
-      _result.command = command;
+      result.command = command;
     }
     if (signedCommand != null) {
-      _result.signedCommand = signedCommand;
+      result.signedCommand = signedCommand;
     }
-    return _result;
+    return result;
   }
   factory Packet.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory Packet.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);

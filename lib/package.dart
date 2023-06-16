@@ -1,6 +1,4 @@
-import 'dart:typed_data';
 import 'dart:convert';
-
 import 'package:archive/archive_io.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
@@ -61,50 +59,50 @@ enum CRCType{crc16,crc32}
     0xB9
   ];
 enum SoftDeviceTypes{
-  s112_nrf52_600,
-  s112_nrf52_610,
-  s112_nrf52_611,
-  s112_nrf52_700,
-  s112_nrf52_701,
-  s112_nrf52_720,
-  s112_nrf52_730,
-  s113_nrf52_700,
-  s113_nrf52_701,
-  s113_nrf52_720,
-  s113_nrf52_730,
-  s122_nrf52_800,
-  s122_nrf52_811,
-  s130_nrf51_100,
-  s130_nrf51_200,
-  s130_nrf51_201,
-  s132_nrf52_200,
-  s132_nrf52_201,
-  s132_nrf52_300,
-  s132_nrf52_310,
-  s132_nrf52_400,
-  s132_nrf52_402,
-  s132_nrf52_403,
-  s132_nrf52_404,
-  s132_nrf52_405,
-  s132_nrf52_500,
-  s132_nrf52_510,
-  s132_nrf52_600,
-  s132_nrf52_610,
-  s132_nrf52_611,
-  s132_nrf52_700,
-  s132_nrf52_701,
-  s132_nrf52_720,
-  s132_nrf52_730,
-  s140_nrf52_600,
-  s140_nrf52_610,
-  s140_nrf52_611,
-  s140_nrf52_700,
-  s140_nrf52_701,
-  s140_nrf52_720,
-  s140_nrf52_730,
-  s212_nrf52_611,
-  s332_nrf52_611,
-  s340_nrf52_611
+  s112NRF52d600,
+  s112NRF52d610,
+  s112NRF52d611,
+  s112NRF52d700,
+  s112NRF52d701,
+  s112NRF52d720,
+  s112NRF52d730,
+  s113NRF52d700,
+  s113NRF52d701,
+  s113NRF52d720,
+  s113NRF52d730,
+  s122NRF52d800,
+  s122NRF52d811,
+  s130NRF51d100,
+  s130NRF51d200,
+  s130NRF51d201,
+  s132NRF52d200,
+  s132NRF52d201,
+  s132NRF52d300,
+  s132NRF52d310,
+  s132NRF52d400,
+  s132NRF52d402,
+  s132NRF52d403,
+  s132NRF52d404,
+  s132NRF52d405,
+  s132NRF52d500,
+  s132NRF52d510,
+  s132NRF52d600,
+  s132NRF52d610,
+  s132NRF52d611,
+  s132NRF52d700,
+  s132NRF52d701,
+  s132NRF52d720,
+  s132NRF52d730,
+  s140NRF52d600,
+  s140NRF52d610,
+  s140NRF52d611,
+  s140NRF52d700,
+  s140NRF52d701,
+  s140NRF52d720,
+  s140NRF52d730,
+  s212NRF52d611,
+  s332NRF52d611,
+  s340NRF52d611
 }
 
 class NRFUTIL{
@@ -113,8 +111,8 @@ class NRFUTIL{
     this.hardwareVersion = 0xFFFFFFFF,
     this.applicationVersion = 0xFFFFFFFF,
     this.bootloaderVersion = 0xFFFFFFFF,
-    this.sofDeviceReqType = SoftDeviceTypes.s132_nrf52_611,
-    //this.softDeviceIdTypes = const [SoftDeviceTypes.s132_nrf52_611],
+    this.sofDeviceReqType = SoftDeviceTypes.s132NRF52d611,
+    //this.softDeviceIdTypes = const [SoftDeviceTypes.s132NRF52d611],
     this.bootValidationTypeArray = const [ValidationType.VALIDATE_SHA256],
     this.signer,
     this.applicationFirmware,
@@ -324,32 +322,32 @@ class NRFUTIL{
   List<int> _calculateSHA256(Uint8List firmware){
     return sha256.convert(firmware).bytes.reversed.toList();
   }
-  List<int> _calculateCRC16(Uint8List bytes) {
-    const int polynomial = 0x1021;// CCITT
-    const int initVal = 0x0000;// XMODEM
-    final bitRange = Iterable.generate(8);
+  // List<int> _calculateCRC16(Uint8List bytes) {
+  //   const int polynomial = 0x1021;// CCITT
+  //   const int initVal = 0x0000;// XMODEM
+  //   final bitRange = Iterable.generate(8);
 
-    int crc = initVal;
-    for (int byte in bytes) {
-      crc ^= (byte << 8);
-      for (int i in bitRange) {
-        crc = (crc & 0x8000) != 0 ? (crc << 1) ^ polynomial : crc << 1;
-      }
-    }
-    ByteData byteData = ByteData(2)..setInt16(0, crc, Endian.little);
-    return byteData.buffer.asUint8List();
-  }
-  List<int> _calculateCRC(CRCType crc,Uint8List firmware){
-    if(crc == CRCType.crc16){
-      return _calculateCRC16(firmware);
-    }
-    else if(crc == CRCType.crc32){
-        return Crc32().convert(firmware).bytes;
-    }
-    else{
-      throw Exception("Invalid CRC type");
-    }
-  }
+  //   int crc = initVal;
+  //   for (int byte in bytes) {
+  //     crc ^= (byte << 8);
+  //     for (int i in bitRange) {
+  //       crc = (crc & 0x8000) != 0 ? (crc << 1) ^ polynomial : crc << 1;
+  //     }
+  //   }
+  //   ByteData byteData = ByteData(2)..setInt16(0, crc, Endian.little);
+  //   return byteData.buffer.asUint8List();
+  // }
+  // List<int> _calculateCRC(CRCType crc,Uint8List firmware){
+  //   if(crc == CRCType.crc16){
+  //     return _calculateCRC16(firmware);
+  //   }
+  //   else if(crc == CRCType.crc32){
+  //       return Crc32().convert(firmware).bytes;
+  //   }
+  //   else{
+  //     throw Exception("Invalid CRC type");
+  //   }
+  // }
   Uint8List _createZipFile(Archive archive){
     ZipEncoder encoder = ZipEncoder();
     OutputStream outputStream = OutputStream(
@@ -363,9 +361,9 @@ class NRFUTIL{
     return Uint8List.fromList(bytes!);
   }
 
-  bool _isBootloaderSoftdeviceCombination(){
-    return softDeviceFirmware != null && bootloaderFirmware != null;
-  }
+  // bool _isBootloaderSoftdeviceCombination(){
+  //   return softDeviceFirmware != null && bootloaderFirmware != null;
+  // }
   // Uint8List normalizeFirmware(){
   //   return NRFHex(firmware_path).toBin();
   // }
