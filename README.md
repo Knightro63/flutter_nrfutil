@@ -1,6 +1,6 @@
 # nrfutil
 
-[![Pub Version](https://img.shields.io/pub/v/oimo_physics)](https://pub.dev/packages/nrfutil)
+[![Pub Version](https://img.shields.io/pub/v/nrfutil)](https://pub.dev/packages/nrfutil)
 [![analysis](https://github.com/Knightro63/apple_vision/actions/workflows/flutter.yml/badge.svg)](https://github.com/Knightro63/flutter_nrfutil/actions/)
 [![Star on Github](https://img.shields.io/github/stars/Knightro63/apple_vision.svg?style=flat&logo=github&colorB=deeppink&label=stars)](https://github.com/Knightro63/flutter_nrfutil)
 [![License: BSD](https://img.shields.io/badge/license-BSD-purple.svg)](https://opensource.org/licenses/BSD)
