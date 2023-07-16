@@ -49,9 +49,9 @@ Find the example for this API [here](https://github.com/Knightro63/flutter_nrfut
 ## Contributing
 
 Contributions are welcome.
-In case of any problems look at [existing issues](https://github.com/Knightro63/oimo_physics/issues), if you cannot find anything related to your problem then open an issue.
-Create an issue before opening a [pull request](https://github.com/Knightro63/oimo_physics/pulls) for non trivial fixes.
-In case of trivial fixes open a [pull request](https://github.com/Knightro63/oimo_physics/pulls) directly.
+In case of any problems look at [existing issues](https://github.com/Knightro63/flutter_nrfutil/issues), if you cannot find anything related to your problem then open an issue.
+Create an issue before opening a [pull request](https://github.com/Knightro63/flutter_nrfutil/pulls) for non trivial fixes.
+In case of trivial fixes open a [pull request](https://github.com/Knightro63/flutter_nrfutil/pulls) directly.
 
 ## Additional Information
 

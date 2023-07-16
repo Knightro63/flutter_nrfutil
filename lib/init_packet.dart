@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'protoc/dfu_cc.pb.dart' as pb;
 import 'protoc/dfu_cc.pbenum.dart';
 
+/// Initilize the packet to be converted to a zip file to be sent via OTA
 class InitPacket{
   InitPacket({
     this.fromBytes,
@@ -110,14 +111,15 @@ class InitPacket{
         throw Exception("Invalid range of firmware argument. [0 - 0xffffffff] is valid range");
     }
   }
-
+  /// Get the bytes to be placed into the packet.
   Uint8List getPacketBytes(){
     return packet.writeToBuffer();
   }
+  /// Get the initial bytes to be placed into the packet.
   Uint8List getInitCommandBytes(){
     return initCommand.writeToBuffer();
   }
-
+  /// Set the packet signiture.
   void setSignature(List<int> signature, SignatureType signatureType){
     pb.Packet newPacket = pb.Packet(
       signedCommand: pb.SignedCommand(

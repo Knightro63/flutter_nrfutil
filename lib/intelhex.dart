@@ -1,9 +1,12 @@
 import 'dart:typed_data';
 import 'dart:math';
 
+/// NRF Architextures supported
 enum NRFArch{nrf51,nrf52,nrf52840}
+/// Soft Device variants supported
 enum SoftDeviceVariant{s1x0,s132,unknown}
 
+/// This is used to create the hex file that uploads to the device.
 class IntelHexRecord{
   IntelHexRecord({
     this.offset = 0,
@@ -22,6 +25,7 @@ class IntelHexRecord{
   int s132EndAddress = 0x3000;//s132_mbr_end_address
   int largest = 0x10000000;
 
+  /// Place the hex file into a binary array
   Uint8List toBinArray({int? start, int? end, int? pad, int? size, bool isApplication = false}){
     //Return binary array.
     pad ??= padding;
@@ -57,6 +61,7 @@ class IntelHexRecord{
     }
     return int.parse('0x$a');
   }
+  /// Does the address have the magic number
   bool addressHasMagicNumber(int address){
     try{
       return ismn == _gets(address, 4);
@@ -65,6 +70,7 @@ class IntelHexRecord{
       return false;
     }
   }
+  /// Get the soft device to place into the hex file
   SoftDeviceVariant getSoftDeviceVariant(){
     int magicNumber = isab + ismno;
 
@@ -81,6 +87,7 @@ class IntelHexRecord{
 
     return SoftDeviceVariant.unknown;
   }
+  /// Get the end of the hex file address
   int getEndAddress(){
     SoftDeviceVariant softDeviceVariant = getSoftDeviceVariant();
     if(softDeviceVariant == SoftDeviceVariant.s132){
@@ -118,18 +125,22 @@ class IntelHexRecord{
     }
     return [start,end];
   }
+  /// The min address for the hex file after the soft device
   int minaddr(){
     int minAdd = buffer.keys.first;
     minAdd = max(getEndAddress(), minAdd);
     return minAdd;
   }
+  /// Max address of the hex file
   int maxaddr(){
     return buffer.keys.last;
   }
 }
 
 class IntelHex {
+  /// Place the hex file into a binary array
   Uint8List hexToBin(String data) => decodeRecord(data).toBinArray();
+  /// Change the file from hex to bin
   List<int> unhexlify(String hexString){
     List<int> htb = [];
     for(int i = 0; i < hexString.length; i+=2){
@@ -137,6 +148,7 @@ class IntelHex {
     }
     return htb;
   }
+  /// Decode the hex record to be combined with other portions of the software
   IntelHexRecord decodeRecord(String data){
     List<String> value = data.replaceAll('\r\n', '').replaceAll('\n','').split(':');
     IntelHexRecord ihr = IntelHexRecord();

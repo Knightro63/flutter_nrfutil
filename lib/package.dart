@@ -9,55 +9,61 @@ import 'signing.dart';
 
 import 'protoc/dfu_cc.pbenum.dart';
 
+/// nrf Utils modes either debug or release form.
 enum NRFUtilMode{debug,release}
+
+/// 
 enum CRCType{crc16,crc32}
 
-  List<int> sdTypeInt = [
-    0xA7,
-    0xB0,
-    0xB8,
-    0xC4,
-    0xCD,
-    0x103,
-    0x126,
-    0xC3,
-    0xCC,
-    0x102,
-    0x125,
-    0xEA,
-    0x112,
-    0x67,
-    0x80,
-    0x87,
-    0x81,
-    0x88,
-    0x8C,
-    0x91,
-    0x95,
-    0x98,
-    0x99,
-    0x9E,
-    0x9F,
-    0x9D,
-    0xA5,
-    0xA8,
-    0xAF,
-    0xB7,
-    0xC2,
-    0xCB,
-    0x101,
-    0x124,
-    0xA9,
-    0xAE,
-    0xB6,
-    0xC1,
-    0xCA,
-    0x100,
-    0x123,
-    0xBC,
-    0xBA,
-    0xB9
-  ];
+/// Soft Device types in the form of hex values
+List<int> sdTypeInt = [
+  0xA7,
+  0xB0,
+  0xB8,
+  0xC4,
+  0xCD,
+  0x103,
+  0x126,
+  0xC3,
+  0xCC,
+  0x102,
+  0x125,
+  0xEA,
+  0x112,
+  0x67,
+  0x80,
+  0x87,
+  0x81,
+  0x88,
+  0x8C,
+  0x91,
+  0x95,
+  0x98,
+  0x99,
+  0x9E,
+  0x9F,
+  0x9D,
+  0xA5,
+  0xA8,
+  0xAF,
+  0xB7,
+  0xC2,
+  0xCB,
+  0x101,
+  0x124,
+  0xA9,
+  0xAE,
+  0xB6,
+  0xC1,
+  0xCA,
+  0x100,
+  0x123,
+  0xBC,
+  0xBA,
+  0xB9
+];
+
+/// All of the soft devices supported by this sdk
 enum SoftDeviceTypes{
   s112NRF52d600,
   s112NRF52d610,
@@ -105,6 +111,12 @@ enum SoftDeviceTypes{
   s340NRF52d611
 }
 
+/// The main class for this sdk.
+/// 
+/// To generate the zip file with all the information to send to a device via OTA 
+/// ```dart
+/// NRFUTIL().generate();
+/// ```
 class NRFUTIL{
   NRFUTIL({
     this.mode = NRFUtilMode.release,
@@ -202,6 +214,7 @@ class NRFUTIL{
     };
   }
 
+  /// Generates the zip file with all the information to send to a device via OTA 
   Future<Uint8List> generate() async{
     if(applicationFirmware == null && bootloaderFirmware == null && softDeviceFirmware == null) throw Exception("No Files Found!");
     if(applicationFirmware != null && bootloaderFirmware != null && softDeviceFirmware == null) throw Exception("Error Application must have, Softdevice and Bootloader Files!");
