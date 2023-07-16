@@ -169,7 +169,6 @@ class _NRFUtilWidgetState extends State<NRFUtilWidget> {
   @override
   Widget build(BuildContext context) {
     deviceWidth = MediaQuery.of(context).size.width;
-    double deviceHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Align(
         alignment: Alignment.center,

@@ -1,15 +1,15 @@
 # nrfutil
 
 [![Pub Version](https://img.shields.io/pub/v/nrfutil)](https://pub.dev/packages/nrfutil)
-[![analysis](https://github.com/Knightro63/apple_vision/actions/workflows/flutter.yml/badge.svg)](https://github.com/Knightro63/flutter_nrfutil/actions/)
-[![Star on Github](https://img.shields.io/github/stars/Knightro63/apple_vision.svg?style=flat&logo=github&colorB=deeppink&label=stars)](https://github.com/Knightro63/flutter_nrfutil)
+[![analysis](https://github.com/Knightro63/flutter_nrfutil/actions/workflows/flutter.yml/badge.svg)](https://github.com/Knightro63/flutter_nrfutil/actions/)
+[![Star on Github](https://img.shields.io/github/stars/Knightro63/flutter_nrfutil.svg?style=flat&logo=github&colorB=deeppink&label=stars)](https://github.com/Knightro63/flutter_nrfutil)
 [![License: BSD](https://img.shields.io/badge/license-BSD-purple.svg)](https://opensource.org/licenses/BSD)
 
 A Flutter plugin to create nRF DFU packages with signing for DFU updates on nRF51 and nRF52 devices. This plugin also can generate key for signing DFU packages and c code that is used on the device for verification.
 
 **PLEASE READ THIS** before continuing or posting a [new issue](https://github.com/Knightro63/flutter_nrfutil):
 
-- This plugin is not sponsor or maintained by [Nordic Semiconductor](https://www.nordicsemi.com/Support/Documentation). The [authors](https://github.com/Knightro63/apple_vision/blob/main/AUTHORS) are developers who wanted to make it easier to create dfu packets for nrf devices.
+- This plugin is not sponsor or maintained by [Nordic Semiconductor](https://www.nordicsemi.com/Support/Documentation). The [authors](https://github.com/Knightro63/flutter_nrfutil/blob/main/AUTHORS) are developers who wanted to make it easier to create dfu packets for nrf devices.
 
 ## Getting started
 

@@ -1,19 +1,19 @@
 name: nrfutil
 description: A Flutter plugin to create nRF DFU packages with signing for DFU updates on nRF51 and nRF52 devices.
-version: 0.0.1
+version: 0.0.2
 repository: https://github.com/Knightro63/flutter_nrfutil
 
 environment:
-  sdk: ">=2.17.6 <3.0.0"
+  sdk: ">=2.17.6 <4.0.0"
   flutter: ">=1.20.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  archive: ^3.3.1
-  protobuf: ^2.1.0
-  basic_utils: ^4.5.2
-  crypto: ^3.0.2
+  archive: ^3.3.7
+  protobuf: ^3.0.0
+  basic_utils: ^5.6.0
+  crypto: ^3.0.3
 
 dev_dependencies:
   flutter_test:
@@ -22,4 +22,4 @@ dev_dependencies:
 
 false_secrets:
  - /lib/signing.dart
- - /example/nrfutil_example/assets/key.pem
+ - /example/assets/key.pem
