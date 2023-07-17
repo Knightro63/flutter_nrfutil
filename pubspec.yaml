@@ -10,10 +10,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  archive: ^3.3.1
-  protobuf: ^2.1.0
-  basic_utils: ^4.5.2
-  crypto: ^3.0.2
+  archive: ^3.3.7
+  protobuf: ^3.0.0
+  basic_utils: ^5.6.1
+  crypto: ^3.0.3
 
 dev_dependencies:
   flutter_test:
