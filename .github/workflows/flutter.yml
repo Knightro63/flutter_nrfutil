@@ -31,6 +31,6 @@ jobs:
       - name: Install dependencies for nrfutil
         run: flutter pub get
         
-      - name: Install dependencies for nrfutil example
-        working-directory: ./example
-        run: flutter pub get
+      # - name: Install dependencies for nrfutil example
+      #   working-directory: ./example
+      #   run: flutter pub get
