@@ -22,4 +22,4 @@ dev_dependencies:
 
 false_secrets:
  - /lib/signing.dart
- - /example/nrfutil_example/assets/key.pem
+ - /example/assets/key.pem
