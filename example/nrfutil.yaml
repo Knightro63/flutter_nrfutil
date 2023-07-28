@@ -1,0 +1,19 @@
+nrfutil:
+  debug: true
+  comment: "test comment"
+  softdevice_type: "s132NRF52d611"
+  export_path: "assets"
+  hardware_version: 0xFFFFFFFF
+  keyfile:
+    generate: true
+    private_key: "assets/key.pem"
+    public_key: "assets/pbkey.pem"
+  bootloader:
+    version: 0xFFFFFFFF
+    path: "assets/firmwares/foo.hex"
+  application:
+    version: 0xFFFFFFFF
+    path: "assets/firmwares/bar.hex"
+  softdevice:
+    version: 0xFFFFFFFF
+    path: "assets/firmwares/s132_nrf52_mini.hex"

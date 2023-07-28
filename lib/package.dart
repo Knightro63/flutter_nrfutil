@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'package:archive/archive_io.dart';
 import 'package:crypto/crypto.dart';
-import 'package:flutter/foundation.dart';
+import 'package:nrfutil/terminal/logger.dart';
+import 'dart:typed_data';
 
 import 'init_packet.dart';
 import 'intelhex.dart';
@@ -16,7 +17,7 @@ enum NRFUtilMode{debug,release}
 enum CRCType{crc16,crc32}
 
 /// Soft Device types in the form of hex values
-List<int> sdTypeInt = [
+const List<int> sdTypeInt = [
   0xA7,
   0xB0,
   0xB8,
@@ -123,41 +124,45 @@ class NRFUTIL{
     this.hardwareVersion = 0xFFFFFFFF,
     this.applicationVersion = 0xFFFFFFFF,
     this.bootloaderVersion = 0xFFFFFFFF,
-    this.sofDeviceReqType = SoftDeviceTypes.s132NRF52d611,
+    this.softDeviceReqType = SoftDeviceTypes.s132NRF52d611,
     //this.softDeviceIdTypes = const [SoftDeviceTypes.s132NRF52d611],
     this.bootValidationTypeArray = const [ValidationType.VALIDATE_SHA256],
-    this.signer,
+    Signing? signer,
     this.applicationFirmware,
     this.bootloaderFirmware,
     this.softDeviceFirmware,
     this.keyFile,
-    this.manufacturerId = 0,
-    this.imageType = 0,
+    // this.manufacturerId = 0,
+    // this.imageType = 0,
     this.comment,
+    this.logger
   }){
-    sofDeviceReq = sdTypeInt[sofDeviceReqType.index];
+    sofDeviceReq = sdTypeInt[softDeviceReqType.index];
 
     if(signer == null){
       if(keyFile != null){
         String keyString = keyFile!;
-        signer = Signing(privateKey: keyString);
-        if(keyString == signer!.defaultKey){ 
-          debugPrint("Warning your key file is compromised, please generate a new key for signing!");
+        this.signer = Signing(privateKey: keyString);
+        if(keyString == this.signer.defaultKey){ 
+          logger?.verbose("Warning your key file is compromised, please generate a new key for signing!");
         }
       }
       else{
-        signer = Signing();
-        debugPrint("Warning you are using a default key which is compromised!");
+        this.signer = Signing();
+        logger?.verbose("Warning you are using a default key which is compromised!");
       }
     }
-
+    else{
+      this.signer = signer;
+    }
   }
 
+  NRFLogger? logger;
   NRFUtilMode mode;
   int hardwareVersion;
   int applicationVersion;
   int bootloaderVersion;
-  SoftDeviceTypes sofDeviceReqType;
+  SoftDeviceTypes softDeviceReqType;
   List<ValidationType> bootValidationTypeArray;
   //List<SoftDeviceTypes> softDeviceIdTypes;
   late int sofDeviceReq;
@@ -167,9 +172,9 @@ class NRFUTIL{
   String? softDeviceFirmware;
   String? keyFile;
   String? comment;
-  int imageType;
-  int manufacturerId;
-  Signing? signer;
+  int imageType = 0;
+  int manufacturerId = 0;
+  late Signing signer;
 
   late String zipFile;
   dynamic firmwaresData = [];
@@ -229,6 +234,7 @@ class NRFUTIL{
     int? fwdsdsize;
 
     if(applicationFirmware != null){
+      logger?.verbose("Application Firmware to Bin array!");
       String app = applicationFirmware!;
       firmware.add(intelHex.decodeRecord(app).toBinArray(isApplication: true));
       fileNames.add('application');
@@ -236,6 +242,7 @@ class NRFUTIL{
     }
     if(bootloaderFirmware != null || softDeviceFirmware != null){
       if(bootloaderFirmware != null && softDeviceFirmware != null){
+        logger?.verbose("Bootloader and Softdevice Firmware to Bin array!");
         key.add(FwType.SOFTDEVICE_BOOTLOADER);
         fileNames.add('sd_bl');
         String app1 = softDeviceFirmware!;
@@ -249,12 +256,14 @@ class NRFUTIL{
         firmware.add(Uint8List.fromList(sdhex+blhex));
       }
       else if(bootloaderFirmware != null){
+        logger?.verbose("Bootloader Firmware to Bin array!");
         String app = bootloaderFirmware!;
         firmware.add(intelHex.decodeRecord(app).toBinArray());
         key.add(FwType.BOOTLOADER);
         fileNames.add('bootloader');
       }
       else if(softDeviceFirmware != null){
+        logger?.verbose("Softdevice Firmware to Bin array!");
         String app = softDeviceFirmware!;
         firmware.add(intelHex.decodeRecord(app).toBinArray());
         key.add(FwType.SOFTDEVICE);
@@ -263,10 +272,10 @@ class NRFUTIL{
     }
 
     String mani = json.encode(_manifest(key,fileNames,[fwdblsize,fwdsdsize]));
-
+    
     for(int i = 0; i < key.length; i++){
       //Calculate the hash for the .bin file located in the work directory
-      List<int> firmwareHash = _calculateSHA256(firmware[i]);
+      List<int> firmwareHash = _calculateSHA256(firmware[i],key[i]);
       int binLength = firmware[i].length;
 
       int sdSize = 0;
@@ -292,10 +301,10 @@ class NRFUTIL{
       for(int x = 0; x < bootValidationTypeArray.length; x++){
         if(bootValidationTypeArray[x]  == ValidationType.VALIDATE_ECDSA_P256_SHA256){
           if(key[i] == FwType.SOFTDEVICE_BOOTLOADER){
-            bootValidationBytesArray.add(_signFirmware(signer!, firmware[i]));
+            bootValidationBytesArray.add(_signFirmware(firmware[i]));
           }
           else{
-            bootValidationBytesArray.add(_signFirmware(signer!, firmware[i]));
+            bootValidationBytesArray.add(_signFirmware(firmware[i]));
           }
         }
         else{
@@ -303,14 +312,14 @@ class NRFUTIL{
         }
       }
 
-      InitPacket initPacket = InitPacket(
+      final InitPacket initPacket = InitPacket(
         fromBytes: null,
         hashBytes: firmwareHash,
         hashType: HashType.SHA256,
         bootValidationType: bootValidationTypeArray,
         bootValidationBytes: bootValidationBytesArray,
         dfuType: key[i],
-        isDebug: false,
+        isDebug: mode == NRFUtilMode.debug,
         fwVersion: sdSize == 0?blSize == 0?applicationVersion:bootloaderVersion:0xffffffff,
         hwVersion: hardwareVersion,
         sdSize: sdSize,
@@ -319,20 +328,21 @@ class NRFUTIL{
         sdReq: [sofDeviceReq],
       );
 
-      Uint8List sig = signer!.sign(initPacket.getInitCommandBytes());
+      final Uint8List sig = signer.sign(initPacket.getInitCommandBytes());
       initPacket.setSignature(sig, SignatureType.ECDSA_P256_SHA256);
+      signer.verify(initPacket.getInitCommandBytes());
 
       final Uint8List pack = initPacket.getPacketBytes();
-      signer!.verify(pack);  
-
       archive.addFile(ArchiveFile('${fileNames[i]}.bin', firmware[i].length, firmware[i]));
       archive.addFile(ArchiveFile('${fileNames[i]}.dat', pack.length, pack));
     }
+    
     archive.addFile(ArchiveFile('manifest.json', mani.length, mani));
     return _createZipFile(archive);
   }
 
-  List<int> _calculateSHA256(Uint8List firmware){
+  List<int> _calculateSHA256(Uint8List firmware, FwType type){
+    logger?.verbose("Encoding ${type.name.toLowerCase()} to sha256!");
     return sha256.convert(firmware).bytes.reversed.toList();
   }
   // List<int> _calculateCRC16(Uint8List bytes) {
@@ -362,6 +372,8 @@ class NRFUTIL{
   //   }
   // }
   Uint8List _createZipFile(Archive archive){
+    logger?.verbose("Archivng File!");
+    
     ZipEncoder encoder = ZipEncoder();
     OutputStream outputStream = OutputStream(
       byteOrder: LITTLE_ENDIAN,
@@ -380,7 +392,22 @@ class NRFUTIL{
   // Uint8List normalizeFirmware(){
   //   return NRFHex(firmware_path).toBin();
   // }
-  Uint8List _signFirmware(Signing signer, Uint8List firmwareFile){
+  Uint8List _signFirmware(Uint8List firmwareFile){
+    logger?.verbose("Signing Firmware!");
     return signer.sign(firmwareFile);
+  }
+
+  static SoftDeviceTypes getSoftDeviceTypesFromString(String sdtype){
+    for(int i = 0; i < SoftDeviceTypes.values.length; i++){
+      if(SoftDeviceTypes.values[i].name.toLowerCase() == sdtype.toLowerCase()){
+        return SoftDeviceTypes.values[i];
+      }
+    }
+    String error = 'Valid Soft Device Types are: \n';
+    for(int i = 0; i < SoftDeviceTypes.values.length; i++){
+      error += '${SoftDeviceTypes.values[i].name}\n';
+    }
+
+    throw('Invalid Soft Device Type\n $error');
   }
 }

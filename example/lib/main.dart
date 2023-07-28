@@ -198,7 +198,7 @@ class _NRFUtilWidgetState extends State<NRFUtilWidget> {
             squareButton(
               text: 'generate key',
               onTap: () {
-                SaveFile.saveBytes(printName: 'nrfutil_keys', fileType: 'zip', bytes: Signing().generateKey());
+                SaveFile.saveBytes(printName: 'nrfutil_keys', fileType: 'zip', bytes: Signing.generateKey().zipFile);
               },
               borderColor: Colors.blueGrey,
               height: 45,
@@ -213,7 +213,7 @@ class _NRFUtilWidgetState extends State<NRFUtilWidget> {
                   hardwareVersion: 52,
                   applicationVersion: 1,
                   keyFile: key,
-                  sofDeviceReqType: sdReq
+                  softDeviceReqType: sdReq
                 ).generate().then((value){
                   SaveFile.saveBytes(printName: 'nrfutil_test', fileType: 'zip', bytes: value);
                 });
@@ -231,7 +231,7 @@ class _NRFUtilWidgetState extends State<NRFUtilWidget> {
                   hardwareVersion: 52,
                   bootloaderVersion: 1,
                   keyFile: key,
-                  sofDeviceReqType: sdReq
+                  softDeviceReqType: sdReq
                 ).generate().then((value){
                   SaveFile.saveBytes(printName: 'nrfutil_test', fileType: 'zip', bytes: value);
                 });
@@ -248,7 +248,7 @@ class _NRFUtilWidgetState extends State<NRFUtilWidget> {
                   softDeviceFirmware: softDeviceFirmware,
                   hardwareVersion: 52,
                   keyFile: key,
-                  sofDeviceReqType: sdReq
+                  softDeviceReqType: sdReq
                 ).generate().then((value){
                   SaveFile.saveBytes(printName: 'nrfutil_test', fileType: 'zip', bytes: value);
                 });
@@ -267,7 +267,7 @@ class _NRFUtilWidgetState extends State<NRFUtilWidget> {
                   hardwareVersion: 52,
                   applicationVersion: 1,
                   keyFile: key,
-                  sofDeviceReqType: sdReq
+                  softDeviceReqType: sdReq
                 ).generate().then((value){
                   SaveFile.saveBytes(printName: 'nrfutil_test', fileType: 'zip', bytes: value);
                 });
@@ -285,7 +285,7 @@ class _NRFUtilWidgetState extends State<NRFUtilWidget> {
                   bootloaderFirmware: bootloaderFirmware,
                   bootloaderVersion: 1,
                   keyFile: key,
-                  sofDeviceReqType: sdReq
+                  softDeviceReqType: sdReq
                 ).generate().then((value){
                   SaveFile.saveBytes(printName: 'nrfutil_test', fileType: 'zip', bytes: value);
                 });
@@ -305,7 +305,7 @@ class _NRFUtilWidgetState extends State<NRFUtilWidget> {
                   applicationVersion: 1,
                   hardwareVersion: 52,
                   keyFile: key,
-                  sofDeviceReqType: sdReq
+                  softDeviceReqType: sdReq
                 ).generate().then((value){
                   SaveFile.saveBytes(printName: 'nrfutil_test', fileType: 'zip', bytes: value);
                 });

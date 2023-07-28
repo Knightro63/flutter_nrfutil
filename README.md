@@ -23,6 +23,42 @@ A DFU package is able to consist of standalone firmware options e.g.(application
 
 ### Generate a nRF DFU package
 Generates an archived package as a Uint8List.
+
+## Generate in yaml
+In you pubspec.yaml or nrfutil.yaml add:
+```yaml
+nrfutil:
+  debug: true
+  comment: "test comment"
+  softdevice_type: "s132NRF52d611"
+  export_path: "assets"
+  hardware_version: 0xFFFFFFFF
+  keyfile:
+    generate: false
+    private_key: "assets/key.pem"
+    public_key: "assets/pbkey.pem"
+  bootloader:
+    version: 0xFFFFFFFF
+    path: "assets/firmwares/foo.hex"
+  application:
+    version: 0xFFFFFFFF
+    path: "assets/firmwares/bar.hex"
+  softdevice:
+    version: 0xFFFFFFFF
+    path: "assets/firmwares/s132_nrf52_mini.hex"
+```
+
+Then run the following code.
+
+`dart run nrfutil --verbose`
+
+## Generate in terminal
+To do this in terminal only run:
+
+`dart run nrfutil --verbose --application assets/firmwares/bar.hex --app_version 0xFFFFFFFF --debug`
+
+## Generate in your flutter package
+Generates an archived package as a Uint8List.
 ```dart
 Uint8List package =  await NRFUTIL(
     applicationFirmware: applicationFirmware,
@@ -37,9 +73,9 @@ Uint8List package =  await NRFUTIL(
 ### Generate a Private and Public key
 Generates an archived package as a Uint8List.
 
-Key generation is able to provide a private key in pem form, but the public key is able to be in either pem or code e.g.(c) form. To change the public key export type to pem add publicKeyType: SigningKeyType.pem.
+Key generation is able to provide a private key in pem form, but the public key is able to be in either pem or code e.g.(c) form.
 ```dart
-Uint8List package =  await Signing().generateKey();
+Uint8List package =  await Signing.generateKey();
 ```
 
 ## Example

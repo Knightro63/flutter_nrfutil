@@ -11,14 +11,36 @@ dependencies:
     sdk: flutter
   path_provider: ^2.0.15
   universal_html: ^2.2.3
-  nrfutil:
-    path: ../
   cupertino_icons: ^1.0.5
 
 dev_dependencies:
+  nrfutil:
+    path: ../
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.2
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+nrfutil:
+  debug: false
+  comment: "test comment"
+  softdevice_type: "s132NRF52d611"
+  export_path: "assets"
+  hardware_version: 0xFFFFFFFF
+  keyfile:
+    generate: false
+    private_key: "assets/key.pem"
+    public_key: "assets/pbkey.pem"
+  bootloader:
+    version: 0xFFFFFFFF
+    path: "assets/firmwares/bar.hex"
+  application:
+    version: 0xFFFFFFFF
+    path: "assets/firmwares/bar.hex"
+  softdevice:
+    version: 0xFFFFFFFF
+    path: "assets/firmwares/foo.hex"
 
 flutter:
   uses-material-design: true
