@@ -71,8 +71,6 @@ class Signing{
     dynamic publicKey,
     bool isVerbose = false
   }){
-    logger = NRFLogger(isVerbose);
-
     if(privateKey != null){
       if(privateKey is String){
         loadPrivateKeyFromPem(privateKey);
@@ -103,7 +101,6 @@ class Signing{
     }
   }
 
-  late NRFLogger logger;
   SigningKey signingKey = SigningKey();
   final String defaultKey = """-----BEGIN EC PRIVATE KEY-----
   MHcCAQEEIGvsrpXh8m/E9bj1dq/0o1aBPQVAFJQ6Pzusx685URE0oAoGCCqGSM49
@@ -180,27 +177,27 @@ __ALIGN(4) const uint8_t pk[64] ={
   }
   /// Loads a private key from Pem file.
   void loadPrivateKeyFromPem([String? key]){
-    logger.verbose('Loading Private Key From Pem.');
+    logger?.verbose('Loading Private Key From Pem.');
     signingKey.privateKey = key == null?CryptoUtils.ecPrivateKeyFromPem(defaultKey):CryptoUtils.ecPrivateKeyFromPem(key);
   }
   /// Loads a private key from Uint8List.
   void loadPrivateKeyFromBytes(Uint8List? bytes){
-    logger.verbose('Loading Private Key From Bytes.');
+    logger?.verbose('Loading Private Key From Bytes.');
     signingKey.privateKey = bytes == null?CryptoUtils.ecPrivateKeyFromPem(defaultKey):CryptoUtils.ecPrivateKeyFromDerBytes(bytes);
   }
   /// Loads a public key from Uint8List.
   void loadPublicKeyFromBytes(Uint8List bytes){
-    logger.verbose('Loading Public Key From Bytes.');
+    logger?.verbose('Loading Public Key From Bytes.');
     signingKey.publicKey = CryptoUtils.ecPublicKeyFromDerBytes(bytes);
   }
   /// Loads a public key from PEM file.
   void loadPublicKeyFromPem(String key){
-    logger.verbose('Loading Public Key From Pem.');
+    logger?.verbose('Loading Public Key From Pem.');
     signingKey.publicKey = CryptoUtils.ecPublicKeyFromPem(key);
   }
   /// Loads a public key from PEM file.
   void loadPublicKeyFromCode(String key){
-    logger.verbose('Loading Public Key From Code.');
+    logger?.verbose('Loading Public Key From Code.');
     String hexString = key.split('{')[1].replaceAll('};', '').replaceAll(' ', '').replaceAll('\n', '');
     List<String> data = hexString.split(',');
     List<int> pbkList = [];
@@ -246,18 +243,18 @@ __ALIGN(4) const uint8_t pk[64] ={
   bool verify(Uint8List signedData){
     if(!signingKey.hasSignature || !signingKey.hasPublicKey){ 
       //throw Exception("Can't save key. No key created/loaded");
-      logger.verbose('Unable to verify! No Public Key Provided!');
+      logger?.verbose('Unable to verify! No Public Key Provided!');
       return false;
     }
     else{
-      logger.verbose('Verifying Data!');
+      logger?.verbose('Verifying Data!');
       bool ver = CryptoUtils.ecVerify(
         signingKey.publicKey!, 
         signedData, 
         signingKey.signature!, 
         algorithm: 'SHA-256/ECDSA'
       );
-      ver?logger.verbose('Data Verified!'):logger.verbose('Data Invalid!');
+      ver?logger?.verbose('Data Verified!'):logger?.verbose('Data Invalid!');
       return ver;
     }
   }

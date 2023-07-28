@@ -2,6 +2,8 @@ import 'package:cli_util/cli_logging.dart';
 
 export 'package:cli_util/cli_logging.dart' show Progress;
 
+NRFLogger? logger;
+
 /// Flutter Launcher Icons Logger
 class NRFLogger {
   late Logger _logger;
@@ -22,7 +24,7 @@ class NRFLogger {
   }
 
   /// Logs error messages
-  void error(Object? message) => _logger.stderr('⚠️' + message.toString());
+  void error(Object? message) => _logger.stderr('⚠️ $message');
 
   /// Prints to console if [isVerbose] is true
   void verbose(Object? message) => _logger.trace(message.toString());

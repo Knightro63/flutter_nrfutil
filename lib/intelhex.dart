@@ -46,7 +46,7 @@ class IntelHexRecord{
     }
     return Uint8List.fromList(bin);
   }
-  int _gets(addr, length){
+  int gets(addr, length){
     //Get string of bytes from given address. If any entries are blank
     //from addr through addr+length, a NotEnoughDataError exception will
     //be raised. Padding is not used.
@@ -64,7 +64,7 @@ class IntelHexRecord{
   /// Does the address have the magic number
   bool addressHasMagicNumber(int address){
     try{
-      return ismn == _gets(address, 4);
+      return ismn == gets(address, 4);
     }
     catch(e){
       return false;
@@ -135,13 +135,15 @@ class IntelHexRecord{
   int maxaddr(){
     return buffer.keys.last;
   }
+
+  IntelHexRecord fromfile(stringFile) => IntelHex.decodeRecord(stringFile);
 }
 
 class IntelHex {
   /// Place the hex file into a binary array
-  Uint8List hexToBin(String data) => decodeRecord(data).toBinArray();
+  static Uint8List hexToBin(String data) => decodeRecord(data).toBinArray();
   /// Change the file from hex to bin
-  List<int> unhexlify(String hexString){
+  static List<int> unhexlify(String hexString){
     List<int> htb = [];
     for(int i = 0; i < hexString.length; i+=2){
       htb.add(int.parse(hexString.substring(i, i + 2),radix: 16));
@@ -149,7 +151,7 @@ class IntelHex {
     return htb;
   }
   /// Decode the hex record to be combined with other portions of the software
-  IntelHexRecord decodeRecord(String data){
+  static IntelHexRecord decodeRecord(String data){
     List<String> value = data.replaceAll('\r\n', '').replaceAll('\n','').split(':');
     IntelHexRecord ihr = IntelHexRecord();
     for(int i = 1; i < value.length;i++){

@@ -108,8 +108,8 @@ Future<void> createFromArguments(List<String> arguments) async {
 
   final ArgResults argResults = parser.parse(arguments);
   final bool isVerbose = argResults[prefixOptions[2]];
-  final logger = NRFLogger(isVerbose);
-  logger.verbose('Received args ${argResults.arguments}');
+  logger = NRFLogger(isVerbose);
+  logger?.verbose('Received args ${argResults.arguments}');
 
   if (argResults[prefixOptions[1]]) {
     stdout.writeln('Generates dfu files for nRF51 and nRF52 devices');
@@ -140,7 +140,7 @@ Future<void> createFromArguments(List<String> arguments) async {
     );
   }
   //try {
-    await createFromConfig(flutterLauncherIconsConfigs,logger);
+    await createFromConfig(flutterLauncherIconsConfigs);
     stdout.writeln('\n✓ Successfully generated nrf files');
     exit(0);
   // } catch (e) {
@@ -152,7 +152,6 @@ Future<void> createFromArguments(List<String> arguments) async {
 
 Future<void> createFromConfig(
   Config flutterConfigs,
-  NRFLogger logger
 ) async {
   String? key;
   Signing? signer;
@@ -165,7 +164,6 @@ Future<void> createFromConfig(
     signer = Signing(
       privateKey: data.privateKey,
       publicKey: data.publicKeyPem,
-      isVerbose: logger.isVerbose
     );
     await saveBytes(
       path: iconsDir.path,
@@ -178,7 +176,6 @@ Future<void> createFromConfig(
     signer = Signing(
       privateKey: getFirmware(flutterConfigs.keyfileConfig?.privateKey),
       publicKey: getFirmware(flutterConfigs.keyfileConfig?.publicKey),
-      isVerbose: logger.isVerbose
     );
   }
 
@@ -197,9 +194,8 @@ Future<void> createFromConfig(
       applicationVersion: flutterConfigs.applicationConfig.version,
       keyFile: key,
       signer: signer,
-      softDeviceReqType: NRFUTIL.getSoftDeviceTypesFromString(flutterConfigs.sofDeviceReqType),
+      softDeviceReqType: NRFPackage.getSoftDeviceTypesFromString(flutterConfigs.sofDeviceReqType),
       comment: flutterConfigs.comment,
-      logger: logger
     ).generate();
 
     await saveBytes(

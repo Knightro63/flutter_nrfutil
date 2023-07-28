@@ -135,7 +135,6 @@ class NRFUTIL{
     // this.manufacturerId = 0,
     // this.imageType = 0,
     this.comment,
-    this.logger
   }){
     sofDeviceReq = sdTypeInt[softDeviceReqType.index];
 
@@ -157,7 +156,6 @@ class NRFUTIL{
     }
   }
 
-  NRFLogger? logger;
   NRFUtilMode mode;
   int hardwareVersion;
   int applicationVersion;
@@ -226,7 +224,6 @@ class NRFUTIL{
 
     List<FwType> key = [];
     List<String> fileNames = [];
-    IntelHex intelHex = IntelHex();
     List<Uint8List>? firmware = [];
     Archive archive = Archive();
 
@@ -236,7 +233,7 @@ class NRFUTIL{
     if(applicationFirmware != null){
       logger?.verbose("Application Firmware to Bin array!");
       String app = applicationFirmware!;
-      firmware.add(intelHex.decodeRecord(app).toBinArray(isApplication: true));
+      firmware.add(IntelHex.decodeRecord(app).toBinArray(isApplication: true));
       fileNames.add('application');
       key.add(FwType.APPLICATION);
     }
@@ -248,8 +245,8 @@ class NRFUTIL{
         String app1 = softDeviceFirmware!;
         String app = bootloaderFirmware!;
     
-        Uint8List sdhex = intelHex.decodeRecord(app1).toBinArray();
-        Uint8List blhex = intelHex.decodeRecord(app).toBinArray();
+        Uint8List sdhex = IntelHex.decodeRecord(app1).toBinArray();
+        Uint8List blhex = IntelHex.decodeRecord(app).toBinArray();
 
         fwdblsize = blhex.length;
         fwdsdsize = sdhex.length;
@@ -258,14 +255,14 @@ class NRFUTIL{
       else if(bootloaderFirmware != null){
         logger?.verbose("Bootloader Firmware to Bin array!");
         String app = bootloaderFirmware!;
-        firmware.add(intelHex.decodeRecord(app).toBinArray());
+        firmware.add(IntelHex.decodeRecord(app).toBinArray());
         key.add(FwType.BOOTLOADER);
         fileNames.add('bootloader');
       }
       else if(softDeviceFirmware != null){
         logger?.verbose("Softdevice Firmware to Bin array!");
         String app = softDeviceFirmware!;
-        firmware.add(intelHex.decodeRecord(app).toBinArray());
+        firmware.add(IntelHex.decodeRecord(app).toBinArray());
         key.add(FwType.SOFTDEVICE);
         fileNames.add('softdevice');
       }
@@ -275,7 +272,7 @@ class NRFUTIL{
     
     for(int i = 0; i < key.length; i++){
       //Calculate the hash for the .bin file located in the work directory
-      List<int> firmwareHash = _calculateSHA256(firmware[i],key[i]);
+      List<int> firmwareHash = NRFPackage.calculateSHA256(firmware[i],key[i]);
       int binLength = firmware[i].length;
 
       int sdSize = 0;
@@ -301,10 +298,10 @@ class NRFUTIL{
       for(int x = 0; x < bootValidationTypeArray.length; x++){
         if(bootValidationTypeArray[x]  == ValidationType.VALIDATE_ECDSA_P256_SHA256){
           if(key[i] == FwType.SOFTDEVICE_BOOTLOADER){
-            bootValidationBytesArray.add(_signFirmware(firmware[i]));
+            bootValidationBytesArray.add(NRFPackage.signFirmware(signer,firmware[i]));
           }
           else{
-            bootValidationBytesArray.add(_signFirmware(firmware[i]));
+            bootValidationBytesArray.add(NRFPackage.signFirmware(signer,firmware[i]));
           }
         }
         else{
@@ -338,40 +335,45 @@ class NRFUTIL{
     }
     
     archive.addFile(ArchiveFile('manifest.json', mani.length, mani));
-    return _createZipFile(archive);
+    return NRFPackage.createZipFile(archive);
   }
+  
 
-  List<int> _calculateSHA256(Uint8List firmware, FwType type){
+
+}
+
+class NRFPackage{
+  static List<int> calculateSHA256(Uint8List firmware, FwType type){
     logger?.verbose("Encoding ${type.name.toLowerCase()} to sha256!");
     return sha256.convert(firmware).bytes.reversed.toList();
   }
-  // List<int> _calculateCRC16(Uint8List bytes) {
-  //   const int polynomial = 0x1021;// CCITT
-  //   const int initVal = 0x0000;// XMODEM
-  //   final bitRange = Iterable.generate(8);
+  static List<int> calculateCRC16(Uint8List bytes) {
+    const int polynomial = 0x1021;// CCITT
+    const int initVal = 0x0000;// XMODEM
+    final bitRange = Iterable.generate(8);
 
-  //   int crc = initVal;
-  //   for (int byte in bytes) {
-  //     crc ^= (byte << 8);
-  //     for (int i in bitRange) {
-  //       crc = (crc & 0x8000) != 0 ? (crc << 1) ^ polynomial : crc << 1;
-  //     }
-  //   }
-  //   ByteData byteData = ByteData(2)..setInt16(0, crc, Endian.little);
-  //   return byteData.buffer.asUint8List();
-  // }
-  // List<int> _calculateCRC(CRCType crc,Uint8List firmware){
-  //   if(crc == CRCType.crc16){
-  //     return _calculateCRC16(firmware);
-  //   }
-  //   else if(crc == CRCType.crc32){
-  //       return Crc32().convert(firmware).bytes;
-  //   }
-  //   else{
-  //     throw Exception("Invalid CRC type");
-  //   }
-  // }
-  Uint8List _createZipFile(Archive archive){
+    int crc = initVal;
+    for (int byte in bytes) {
+      crc ^= (byte << 8);
+      for (int i in bitRange) {
+        crc = (crc & 0x8000) != 0 ? (crc << 1) ^ polynomial : crc << 1;
+      }
+    }
+    ByteData byteData = ByteData(2)..setInt16(0, crc, Endian.little);
+    return byteData.buffer.asUint8List();
+  }
+  static int calculateCRC(CRCType crc,Uint8List firmware){
+    if(crc == CRCType.crc16){
+      return calculateCRC16(firmware)[0];
+    }
+    else if(crc == CRCType.crc32){
+        return getCrc32(Crc32().convert(firmware).bytes);
+    }
+    else{
+      throw Exception("Invalid CRC type");
+    }
+  }
+  static Uint8List createZipFile(Archive archive){
     logger?.verbose("Archivng File!");
     
     ZipEncoder encoder = ZipEncoder();
@@ -389,14 +391,16 @@ class NRFUTIL{
   // bool _isBootloaderSoftdeviceCombination(){
   //   return softDeviceFirmware != null && bootloaderFirmware != null;
   // }
-  // Uint8List normalizeFirmware(){
-  //   return NRFHex(firmware_path).toBin();
-  // }
-  Uint8List _signFirmware(Uint8List firmwareFile){
+  static Uint8List normalizeFirmware(){
+    return NRFHex(firmware_path).toBin();
+  }
+  static int calculateFileSize(Uint8List firmwareFile){
+    return firmwareFile.length;
+  }
+  static Uint8List signFirmware(Signing signer ,Uint8List firmwareFile){
     logger?.verbose("Signing Firmware!");
     return signer.sign(firmwareFile);
   }
-
   static SoftDeviceTypes getSoftDeviceTypesFromString(String sdtype){
     for(int i = 0; i < SoftDeviceTypes.values.length; i++){
       if(SoftDeviceTypes.values[i].name.toLowerCase() == sdtype.toLowerCase()){
