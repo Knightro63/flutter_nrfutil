@@ -33,6 +33,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.6.1"
+  bisection:
+    dependency: transitive
+    description:
+      name: bisection
+      sha256: "207d68e5168529adb5388c8cbb815a0cb00f51e3efc0c41c8ea91fd38ae6a357"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.3+1"
   boolean_selector:
     dependency: transitive
     description:
@@ -249,7 +257,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.1.0"
+    version: "0.0.3"
   path:
     dependency: transitive
     description:

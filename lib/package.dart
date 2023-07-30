@@ -391,8 +391,8 @@ class NRFPackage{
   // bool _isBootloaderSoftdeviceCombination(){
   //   return softDeviceFirmware != null && bootloaderFirmware != null;
   // }
-  static Uint8List normalizeFirmware(){
-    return NRFHex(firmware_path).toBin();
+  static Uint8List normalizeFirmware(String firmware){
+    return IntelHex.hexToBin(firmware);
   }
   static int calculateFileSize(Uint8List firmwareFile){
     return firmwareFile.length;

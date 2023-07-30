@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:args/args.dart';
+import 'package:nrfutil/ble_dfu_sett.dart';
 import 'package:nrfutil/nrfutil.dart';
+import 'package:nrfutil/protoc/dfu_cc.pbserver.dart';
 import 'package:nrfutil/terminal/config/config.dart';
 import 'package:nrfutil/terminal/constants.dart' as constants;
 import 'package:nrfutil/terminal/exceptions.dart';
@@ -12,7 +14,7 @@ import 'package:nrfutil/terminal/utils.dart';
 const String defaultConfigFile = 'nrfutil.yaml';
 const String flavorConfigFilePattern = r'^nrfutil-(.*).yaml$';
 String importPath = '';
-const List<String> prefixOptions = ['path','help','verbose','keyfile','application','bootloader','softdevice','export','app_version','boot_version','sd_version', 'debug', 'comment', 'sd_type','generate_key','public_key','private_key','hardware_version'];
+const List<String> prefixOptions = ['path','help','verbose','keyfile','application','bootloader','softdevice','export','app_version','boot_version','sd_version', 'debug', 'comment', 'sd_type','generate_key','public_key','private_key','hardware_version','generate_settings'];
 
 Future<void> createFromArguments(List<String> arguments) async {
   final ArgParser parser = ArgParser(allowTrailingOptions: true);
@@ -104,6 +106,11 @@ Future<void> createFromArguments(List<String> arguments) async {
       prefixOptions[17],
       help: 'Hardware Version.',
       defaultsTo: '0xffffff',
+    )
+    ..addFlag(
+      prefixOptions[18],
+      help: 'Generate Settings.',
+      defaultsTo: false,
     );
 
   final ArgResults argResults = parser.parse(arguments);
@@ -140,7 +147,10 @@ Future<void> createFromArguments(List<String> arguments) async {
     );
   }
   //try {
-    await createFromConfig(flutterLauncherIconsConfigs);
+    await createFromConfig(
+      flutterLauncherIconsConfigs,
+      argResults[prefixOptions[18]]
+    );
     stdout.writeln('\n✓ Successfully generated nrf files');
     exit(0);
   // } catch (e) {
@@ -152,6 +162,7 @@ Future<void> createFromArguments(List<String> arguments) async {
 
 Future<void> createFromConfig(
   Config flutterConfigs,
+  bool generateSettings
 ) async {
   String? key;
   Signing? signer;
@@ -179,7 +190,34 @@ Future<void> createFromConfig(
     );
   }
 
-  if(
+  if(generateSettings || (flutterConfigs.settingsConfig != null && flutterConfigs.settingsConfig!.generate)){
+    BLDFUSettings sett = BLDFUSettings();
+    if(flutterConfigs.settingsConfig?.path != null){
+      sett.fromHexFile(flutterConfigs.settingsConfig!.path!);
+    }
+    String value = sett.generate(
+      arch: flutterConfigs.settingsConfig?.arch ?? 'NRF52',
+      appFile: getFirmware(flutterConfigs.applicationConfig.path),
+      sdFile: getFirmware(flutterConfigs.softdeviceConfig.path),
+      sdValType: ValidationType.getValTypeFromString(flutterConfigs.settingsConfig?.sdValType) ,//ValidationType.VALIDATE_SHA256,
+      appValType: ValidationType.getValTypeFromString(flutterConfigs.settingsConfig?.appValType) ,//ValidationType.VALIDATE_SHA256,
+      blSettVersion: flutterConfigs.settingsConfig?.blSettVersion ?? 1,
+      blVersion: flutterConfigs.bootloaderConfig.version,
+      appVersion: flutterConfigs.applicationConfig.version,
+      backupAddress: flutterConfigs.settingsConfig?.backupAddress,
+      customBootSettAddr: flutterConfigs.settingsConfig?.customBootSettAddr,
+      noBackup: flutterConfigs.settingsConfig?.noBackup ?? false,
+      signer: signer
+    );
+    print(value);
+    // await saveString(
+    //   printName: 'settings_package', 
+    //   fileType: 'hex', 
+    //   bytes: value,
+    //   path: iconsDir.path
+    // );
+  }
+  else if(
       flutterConfigs.applicationConfig.path != null || 
       flutterConfigs.bootloaderConfig.path != null ||
       flutterConfigs.softdeviceConfig.path != null
@@ -199,7 +237,7 @@ Future<void> createFromConfig(
     ).generate();
 
     await saveBytes(
-      printName: 'nrfutil_test', 
+      printName: 'dfu_package', 
       fileType: 'zip', 
       bytes: value,
       path: iconsDir.path
@@ -225,6 +263,16 @@ Future<void> saveBytes({
   required String fileType,
   required Uint8List bytes,
   required String path,
+  bool isBytes = true
 }) async {
   await File('$path/$printName.$fileType').writeAsBytes(bytes);
+}
+Future<void> saveString({
+  required String printName,
+  required String fileType,
+  required String bytes,
+  required String path,
+  bool isBytes = true
+}) async {
+  await File('$path/$printName.$fileType').writeAsString(bytes);
 }

@@ -75,6 +75,16 @@ class ValidationType extends $pb.ProtobufEnum {
   static ValidationType? valueOf($core.int value) => _byValue[value];
 
   const ValidationType._($core.int v, $core.String n) : super(v, n);
+
+  static ValidationType getValTypeFromString($core.String? type){
+    if(type == null) return ValidationType.NO_VALIDATION;
+    for($core.int i = 0; i < values.length; i++){
+      if(values[i].name.toLowerCase().contains(type)){
+        return values[i];
+      }
+    }
+    return ValidationType.NO_VALIDATION;
+  }
 }
 
 class SignatureType extends $pb.ProtobufEnum {

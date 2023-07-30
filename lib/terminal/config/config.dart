@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:args/args.dart';
 import 'package:checked_yaml/checked_yaml.dart' as yaml;
+import 'package:nrfutil/terminal/config/settings_config.dart';
 import 'package:nrfutil/terminal/exceptions.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:nrfutil/terminal/constants.dart' as constants;
@@ -26,6 +27,7 @@ class Config {
     this.softdeviceConfig = const SoftDeviceConfig(),
     this.applicationConfig = const ApplicationConfig(),
     this.bootloaderConfig = const BootloaderConfig(),
+    this.settingsConfig = const SettingsConfig(),
     this.sofDeviceReqType = 's132NRF52d611',
     this.hardwareVersion = 0xFFFFFFFF,
     this.keyfileConfig,
@@ -56,6 +58,13 @@ class Config {
         'private_key': results['public_key'],
         'public_key': results['public_key'],
         'generate': results['generate_key'],
+      },
+      'settings': {
+        'sd_val_type': results['sd_val_type'],
+        'app_val_type': results['app_val_type'],
+        'generate': results['generate_settings'],
+        'backup': results['backup'],
+        'bl_version': results['bl_version'],
       }
     });
   }
@@ -137,6 +146,10 @@ class Config {
   @JsonKey(name: 'keyfile')
   final KeyFileConfig? keyfileConfig;
 
+  /// MacOS platform config
+  @JsonKey(name: 'settings')
+  final SettingsConfig? settingsConfig;
+
   /// Creates [Config] from [json]
   factory Config.fromJson(Map json){
     return $checkedCreate(
@@ -157,6 +170,8 @@ class Config {
               (v) => v == null ? const BootloaderConfig() : BootloaderConfig.fromJson(v as Map)),
           keyfileConfig: $checkedConvert('keyfile',
               (v) => v == null ? null : KeyFileConfig.fromJson(v as Map)),
+          settingsConfig: $checkedConvert('settings',
+              (v) => v == null ? null : SettingsConfig.fromJson(v as Map)),
         );
         return val;
       },
@@ -168,6 +183,7 @@ class Config {
         'applicationConfig': 'application',
         'bootloaderConfig': 'bootloader',
         'keyfileConfig': 'keyfile',
+        'settingsConfig': 'settings',
         'hardwareVersion': 'hardware_version',
       },
     );
@@ -187,6 +203,7 @@ class Config {
       'application': applicationConfig,
       'bootloader': bootloaderConfig,
       'keyfile': keyfileConfig,
+      'settings': settingsConfig,
       'hardware_version': hardwareVersion
     };
   }
