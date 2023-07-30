@@ -9,11 +9,21 @@ nrfutil:
     private_key: "assets/key.pem"
     public_key: "assets/pbkey.pem"
   bootloader:
-    version: 0xFFFFFFFF
-    path: "assets/firmwares/foo.hex"
+    version: 1 #0xFFFFFFFF
+    path: "assets/firmwares/bar.hex"
   application:
-    version: 0xFFFFFFFF
+    version: 1 #0xFFFFFFFF
     path: "assets/firmwares/bar.hex"
   softdevice:
     version: 0xFFFFFFFF
-    path: "assets/firmwares/s132_nrf52_mini.hex"
+    path: "assets/firmwares/foo.hex"
+  settings: #this needs keys, softdevice, and application to work
+    generate: true
+    bl_sett_version: 1 #1,or œ2
+    no_backup: true
+    #import_settings: "assets/firmwares/bl_settings_v1_nrf52.hex"
+    arch: "NRF52" #'NRF51','NRF52','NRF52QFAB','NRF52810',or 'NRF52840'
+    #custom_boot_sett_addr: 0 #can be null
+    #backup_address: 0 #can be null
+    sd_val_type:  'p256' #null,'p256','crc','sha256'
+    app_val_type: 'p256' #null,'p256','crc','sha256'

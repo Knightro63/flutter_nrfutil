@@ -23,7 +23,7 @@ dev_dependencies:
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 nrfutil:
-  debug: false
+  debug: true
   comment: "test comment"
   softdevice_type: "s132NRF52d611"
   export_path: "assets"
@@ -33,10 +33,10 @@ nrfutil:
     private_key: "assets/key.pem"
     public_key: "assets/pbkey.pem"
   bootloader:
-    version: 1 #0xFFFFFFFF
+    version: 0xFFFFFFFF
     path: "assets/firmwares/bar.hex"
   application:
-    version: 1 #0xFFFFFFFF
+    version: 0xFFFFFFFF
     path: "assets/firmwares/bar.hex"
   softdevice:
     version: 0xFFFFFFFF
@@ -45,13 +45,12 @@ nrfutil:
     generate: true
     bl_sett_version: 1 #1,or œ2
     no_backup: true
-    import_settings: "assets/firmwares/bl_settings_v1_nrf52.hex"
-    arch: "NRF52" #'NRF51','NRF52','NRF52QFAB','NRF52810',or 'NRF52840'
-    #custom_boot_sett_addr: 0 #can be null
-    #backup_address: 0 #can be null
-    #path: 
-    #sd_val_type:  'p256' #null,'p256','crc','sha256'
-    #app_val_type: 'p256' #null,'p256','crc','sha256'
+    #import_settings: "assets/firmwares/bl_settings_v1_nrf52.hex"
+    arch: "NRF51" #'NRF51','NRF52','NRF52QFAB','NRF52810',or 'NRF52840'
+    #custom_boot_sett_addr: 0x0006F000 #can be null
+    #backup_address: 0x0006F000 #can be null
+    sd_val_type:  'p256' #null,'p256','crc','sha256'
+    app_val_type: 'p256' #null,'p256','crc','sha256'
 
 
 flutter:

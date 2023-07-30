@@ -146,18 +146,18 @@ Future<void> createFromArguments(List<String> arguments) async {
       'In case file exists in different directory use --file option',
     );
   }
-  //try {
+  try {
     await createFromConfig(
       flutterLauncherIconsConfigs,
       argResults[prefixOptions[18]]
     );
     stdout.writeln('\n✓ Successfully generated nrf files');
     exit(0);
-  // } catch (e) {
-  //   stderr.writeln('\n✕ Could not generate nrf files');
-  //   stderr.writeln(e);
-  //   exit(2);
-  // }
+  } catch (e) {
+    stderr.writeln('\n✕ Could not generate nrf files');
+    stderr.writeln(e);
+    exit(2);
+  }
 }
 
 Future<void> createFromConfig(
@@ -199,8 +199,8 @@ Future<void> createFromConfig(
       arch: flutterConfigs.settingsConfig?.arch ?? 'NRF52',
       appFile: getFirmware(flutterConfigs.applicationConfig.path),
       sdFile: getFirmware(flutterConfigs.softdeviceConfig.path),
-      sdValType: ValidationType.getValTypeFromString(flutterConfigs.settingsConfig?.sdValType) ,//ValidationType.VALIDATE_SHA256,
-      appValType: ValidationType.getValTypeFromString(flutterConfigs.settingsConfig?.appValType) ,//ValidationType.VALIDATE_SHA256,
+      sdValType: ValidationType.getValTypeFromString(flutterConfigs.settingsConfig?.sdValType),
+      appValType: ValidationType.getValTypeFromString(flutterConfigs.settingsConfig?.appValType),
       blSettVersion: flutterConfigs.settingsConfig?.blSettVersion ?? 1,
       blVersion: flutterConfigs.bootloaderConfig.version,
       appVersion: flutterConfigs.applicationConfig.version,

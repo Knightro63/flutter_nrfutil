@@ -174,6 +174,7 @@ class BLDFUSettings{
   late int bootValidationCrc;
   late int sdValType;
   late int appValType;
+  late int crc;
 
   void setArch(String arch){
     logger?.verbose('Setting Arch to $arch');
@@ -231,8 +232,7 @@ class BLDFUSettings{
       for(int addr = startAddr!; addr < endAddr! + 1;addr++){ //addr in range(start_addr, end_addr + 1){
         list.add(ihObject[addr]);
       }
-    }
-
+    } 
     return getCrc32(list) & 0xFFFFFFFF;//binascii.crc32(bytearray(list)) & 0xFFFFFFFF;
   }
 
@@ -368,7 +368,7 @@ class BLDFUSettings{
     // additional hardcoded values
     bankLayout = 0x0 & 0xffffffff;
     bankCurrent = 0x0 & 0xffffffff;
-
+    
     // Fill the entire settings page with 0's
     for(int offset = 0; offset < setts.bytesCount;offset++){ //offset in range(0, setts.bytesCount){
       ihex[blSettAddr + offset] = 0x00;
@@ -403,7 +403,7 @@ class BLDFUSettings{
       _addValueToHex(setts.bootValidationCrc, bootValidationCrc);
     }
 
-    int crc = calculateCRC32FromHex(ihex,blSettAddr+4,setts.initCmd - 1) & 0xffffffff;
+    crc = calculateCRC32FromHex(ihex,blSettAddr+4,setts.initCmd - 1) & 0xffffffff;
     _addValueToHex(setts.crc, crc);
 
     if(backupAddress == null){
@@ -452,8 +452,8 @@ class BLDFUSettings{
     if( crcTemp != crc){
       throw("CRC32 mismtach: flash: $crc calculated: $crcTemp");
     }
-
-    crc = crc;
+    
+    this.crc = crc;
     blSettVersion     = _getValueFromHex(setts.settingsVersion);
     appVersion         = _getValueFromHex(setts.appVersion);
     blVersion          = _getValueFromHex(setts.blVersion);
