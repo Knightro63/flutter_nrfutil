@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:args/args.dart';
 import 'package:nrfutil/ble_dfu_sett.dart';
+import 'package:nrfutil/intelhex.dart';
 import 'package:nrfutil/nrfutil.dart';
 import 'package:nrfutil/protoc/dfu_cc.pbserver.dart';
 import 'package:nrfutil/terminal/config/config.dart';
@@ -14,7 +15,7 @@ import 'package:nrfutil/terminal/utils.dart';
 const String defaultConfigFile = 'nrfutil.yaml';
 const String flavorConfigFilePattern = r'^nrfutil-(.*).yaml$';
 String importPath = '';
-const List<String> prefixOptions = ['path','help','verbose','keyfile','application','bootloader','softdevice','export','app_version','boot_version','sd_version', 'debug', 'comment', 'sd_type','generate_key','public_key','private_key','hardware_version','generate_settings'];
+const List<String> prefixOptions = ['path','help','verbose','keyfile','application','bootloader','softdevice','export','app_version','boot_version','sd_version', 'debug', 'comment', 'sd_type','generate_key','public_key','private_key','hardware_version','generate_settings','merge'];
 
 Future<void> createFromArguments(List<String> arguments) async {
   final ArgParser parser = ArgParser(allowTrailingOptions: true);
@@ -44,74 +45,82 @@ Future<void> createFromArguments(List<String> arguments) async {
       help: 'Path to export zip files.',
       defaultsTo: '.',
     )
-    // ..addOption(
-    //   prefixOptions[3],
-    //   help: 'Generates public and private keys for signing dfu.',
-    //   defaultsTo: '.',
-    // )
-    ..addOption(
-      prefixOptions[4],
-      help: 'Path to application hex file.',
-    )
-    ..addOption(
-      prefixOptions[6],
-      help: 'Path to softdevice hex file.',
-    )
-    ..addOption(
-      prefixOptions[5],
-      help: 'Path to bootloader hex file.',
-    )
-    ..addOption(
-      prefixOptions[8],
-      help: 'Application Version.',
-      defaultsTo: '0xffffff',
-    )
-    ..addOption(
-      prefixOptions[9],
-      help: 'Bootloader Version.',
-      defaultsTo: '0xffffff',
-    )
-    ..addOption(
-      prefixOptions[10],
-      help: 'Softdevice Version.',
-      defaultsTo: '0xffffff',
+    ..addFlag(
+      prefixOptions[19],
+      abbr: 'm',
+      help: 'Merge hex files.',
+      defaultsTo: false,
     )
     ..addFlag(
       prefixOptions[11],
       help: 'Debug Mode.',
       defaultsTo: false,
     )
-    ..addOption(
-      prefixOptions[12],
-      help: 'Comment',
-    )
-    ..addOption(
-      prefixOptions[13],
-      help: 'Softdevice Type.',
-    )
     ..addFlag(
       prefixOptions[14],
       help: 'Generate new key file.',
       defaultsTo: false
-    )
-    ..addOption(
-      prefixOptions[15],
-      help: 'Public Key file.',
-    )
-    ..addOption(
-      prefixOptions[16],
-      help: 'Private Key file.',
-    )
-    ..addOption(
-      prefixOptions[17],
-      help: 'Hardware Version.',
-      defaultsTo: '0xffffff',
     )
     ..addFlag(
       prefixOptions[18],
       help: 'Generate Settings.',
       defaultsTo: false,
     );
+    // ..addOption(
+    //   prefixOptions[3],
+    //   help: 'Generates public and private keys for signing dfu.',
+    //   defaultsTo: '.',
+    // )
+    // ..addOption(
+    //   prefixOptions[4],
+    //   help: 'Path to application hex file.',
+    // )
+    // ..addOption(
+    //   prefixOptions[6],
+    //   help: 'Path to softdevice hex file.',
+    // )
+    // ..addOption(
+    //   prefixOptions[5],
+    //   help: 'Path to bootloader hex file.',
+    // )
+    // ..addOption(
+    //   prefixOptions[8],
+    //   help: 'Application Version.',
+    //   defaultsTo: '0xffffff',
+    // )
+    // ..addOption(
+    //   prefixOptions[9],
+    //   help: 'Bootloader Version.',
+    //   defaultsTo: '0xffffff',
+    // )
+    // ..addOption(
+    //   prefixOptions[10],
+    //   help: 'Softdevice Version.',
+    //   defaultsTo: '0xffffff',
+    // )
+
+    // ..addOption(
+    //   prefixOptions[12],
+    //   help: 'Comment',
+    // )
+    // ..addOption(
+    //   prefixOptions[13],
+    //   help: 'Softdevice Type.',
+    // )
+    // ..addOption(
+    //   prefixOptions[15],
+    //   help: 'Public Key file.',
+    // )
+    // ..addOption(
+    //   prefixOptions[16],
+    //   help: 'Private Key file.',
+    // )
+    // ..addOption(
+    //   prefixOptions[17],
+    //   help: 'Hardware Version.',
+    //   defaultsTo: '0xffffff',
+    // )
+
 
   final ArgResults argResults = parser.parse(arguments);
   final bool isVerbose = argResults[prefixOptions[2]];
@@ -128,17 +137,17 @@ Future<void> createFromArguments(List<String> arguments) async {
 
   // Load configs from given file(defaults to ./nrfutil.yaml) or from ./pubspec.yaml
   Config? flutterLauncherIconsConfigs;
-  if(
-      argResults[prefixOptions[4]] != null || 
-      argResults[prefixOptions[5]] != null || 
-      argResults[prefixOptions[6]] != null ||
-      argResults[prefixOptions[14]]
-  ){
-    flutterLauncherIconsConfigs = loadConfigFileFromArgResults(argResults);
-  }
-  else{
+  // if(
+  //     argResults[prefixOptions[4]] != null || 
+  //     argResults[prefixOptions[5]] != null || 
+  //     argResults[prefixOptions[6]] != null ||
+  //     argResults[prefixOptions[14]]
+  // ){
+  //   flutterLauncherIconsConfigs = loadConfigFileFromArgResults(argResults);
+  // }
+  // else{
     flutterLauncherIconsConfigs  = loadConfigFileFromYaml(prefixPath);
-  }
+  // }
 
   if (flutterLauncherIconsConfigs == null) {
     throw NoConfigFoundException(
@@ -149,7 +158,8 @@ Future<void> createFromArguments(List<String> arguments) async {
   try {
     await createFromConfig(
       flutterLauncherIconsConfigs,
-      argResults[prefixOptions[18]]
+      argResults[prefixOptions[18]],
+      argResults[prefixOptions[19]]
     );
     stdout.writeln('\n✓ Successfully generated nrf files');
     exit(0);
@@ -162,7 +172,8 @@ Future<void> createFromArguments(List<String> arguments) async {
 
 Future<void> createFromConfig(
   Config flutterConfigs,
-  bool generateSettings
+  bool generateSettings,
+  bool mergeHexFiles
 ) async {
   String? key;
   Signing? signer;
@@ -209,13 +220,13 @@ Future<void> createFromConfig(
       noBackup: flutterConfigs.settingsConfig?.noBackup ?? false,
       signer: signer
     );
-    print(value);
-    // await saveString(
-    //   printName: 'settings_package', 
-    //   fileType: 'hex', 
-    //   bytes: value,
-    //   path: iconsDir.path
-    // );
+
+    await saveString(
+      printName: 'settings_package', 
+      fileType: 'hex', 
+      bytes: value,
+      path: iconsDir.path
+    );
   }
   else if(
       flutterConfigs.applicationConfig.path != null || 
@@ -243,6 +254,27 @@ Future<void> createFromConfig(
       path: iconsDir.path
     );
   }
+
+  if(mergeHexFiles){
+    String? app = getFirmware(flutterConfigs.applicationConfig.path);
+    String? sd = getFirmware(flutterConfigs.softdeviceConfig.path);
+    String? boot = getFirmware(flutterConfigs.bootloaderConfig.path);
+    String? sett = generateSettings?getFirmware('${iconsDir.path}/settings_package.hex'):getFirmware(flutterConfigs.settingsConfig?.path);
+
+    String value = IntelHex.mergeHex([sd,boot,sett,app]);
+    if(value != ''){
+      await saveString(
+        printName: 'merged', 
+        fileType: 'hex', 
+        bytes: value,
+        path: iconsDir.path
+      );
+    }
+    else{
+      stderr.writeln('\n✕ Could not merge files');
+      exit(2);
+    }
+  } 
 }
 
 String? getFirmware(String? location){

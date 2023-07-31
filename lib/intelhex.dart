@@ -467,6 +467,16 @@ class IntelHex{
     }
     return htb;
   }
+  static String mergeHex(List<String?> fileData){
+    String value = '';
+
+    for(int i = 0; i < fileData.length;i++){
+      if(fileData[i] != null){
+        value += fileData[i]!.replaceAll(':00000001FF', '');
+      }
+    }
+    return '$value:00000001FF';
+  }
   /// Decode the hex record to be combined with other portions of the software
   static IntelHex decodeRecord(String data){
     List<String> value = data.replaceAll('\r\n', '').replaceAll('\n','').split(':');
