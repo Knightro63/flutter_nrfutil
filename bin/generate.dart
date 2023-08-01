@@ -1,16 +1,12 @@
 import 'dart:io';
-
 import 'package:args/args.dart';
-
-// import 'package:nrfutil/terminal/constants.dart';
-// import 'package:nrfutil/src/version.dart';
 
 const _defaultConfigFileName = './nrfutil.yaml';
 
 /// The function will be called from command line
 /// using the following command:
 /// ```sh
-/// flutter pub run nrfutil:generate
+/// dart run nrfutil:generate
 /// ```
 ///
 /// Calling this function will generate a nrfutil.yaml file
@@ -90,14 +86,15 @@ nrfutil:
   export_path: "assets"
   keyFile:
     generate: false
-    path: "assets/key.pem"
+    private_key: "assets/key.pem"
+    public_key: "assets/pbkey.pem"
   bootloader:
     version: 0xFFFFFFFF
-    path: "assets/firmwares/foo.hex"
+    path: "assets/firmwares/bar.hex"
   application:
     version: 0xFFFFFFFF
     path: "assets/firmwares/bar.hex"
   softdevice:
     version: 0xFFFFFFFF
-    path: "assets/firmwares/s132_nrf52_mini.hex"
+    path: "assets/firmwares/foo.hex"
 ''';

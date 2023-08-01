@@ -13,7 +13,6 @@ import 'package:path/path.dart' as path;
 import 'package:nrfutil/terminal/utils.dart';
 
 const String defaultConfigFile = 'nrfutil.yaml';
-const String flavorConfigFilePattern = r'^nrfutil-(.*).yaml$';
 String importPath = '';
 const List<String> prefixOptions = ['path','help','verbose','keyfile','application','bootloader','softdevice','export','app_version','boot_version','sd_version', 'debug', 'comment', 'sd_type','generate_key','public_key','private_key','hardware_version','generate_settings','merge'];
 
@@ -284,6 +283,9 @@ String? getFirmware(String? location){
 }
 /// Load the configurations from the yaml file selected
 Config? loadConfigFileFromYaml(String prefixPath) {
+  if(prefixPath == 'nrfutil.yaml or pubspec.yaml'){
+    prefixPath = 'nrfutil.yaml';
+  }
   final flutterLauncherIconsConfigs = Config.loadConfigFromPath(prefixPath) ?? Config.loadConfigFromPubSpec();
   return flutterLauncherIconsConfigs;
 }

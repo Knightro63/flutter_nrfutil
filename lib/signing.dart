@@ -174,16 +174,16 @@ __ALIGN(4) const uint8_t pk[64] ={
     logger?.verbose('Loading Private Key From Pem.');
     signingKey.privateKey = key == null?CryptoUtils.ecPrivateKeyFromPem(defaultKey):CryptoUtils.ecPrivateKeyFromPem(key);
   }
-  /// Loads a private key from Uint8List.
-  void _loadPrivateKeyFromBytes(Uint8List? bytes){
-    logger?.verbose('Loading Private Key From Bytes.');
-    signingKey.privateKey = bytes == null?CryptoUtils.ecPrivateKeyFromPem(defaultKey):CryptoUtils.ecPrivateKeyFromDerBytes(bytes);
-  }
-  /// Loads a public key from Uint8List.
-  void _loadPublicKeyFromBytes(Uint8List bytes){
-    logger?.verbose('Loading Public Key From Bytes.');
-    signingKey.publicKey = CryptoUtils.ecPublicKeyFromDerBytes(bytes);
-  }
+  // /// Loads a private key from Uint8List.
+  // void _loadPrivateKeyFromBytes(Uint8List? bytes){
+  //   logger?.verbose('Loading Private Key From Bytes.');
+  //   signingKey.privateKey = bytes == null?CryptoUtils.ecPrivateKeyFromPem(defaultKey):CryptoUtils.ecPrivateKeyFromDerBytes(bytes);
+  // }
+  // /// Loads a public key from Uint8List.
+  // void _loadPublicKeyFromBytes(Uint8List bytes){
+  //   logger?.verbose('Loading Public Key From Bytes.');
+  //   signingKey.publicKey = CryptoUtils.ecPublicKeyFromDerBytes(bytes);
+  // }
   /// Loads a public key from PEM file.
   void _loadPublicKeyFromPem(String key){
     logger?.verbose('Loading Public Key From Pem.');

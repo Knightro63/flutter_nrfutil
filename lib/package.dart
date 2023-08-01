@@ -139,7 +139,7 @@ class NRFUTIL{
     this.bootloaderVersion = 0xFFFFFFFF,
     this.softDeviceReqType = SoftDeviceTypes.s132NRF52d611,
     //this.softDeviceIdTypes = const [SoftDeviceTypes.s132NRF52d611],
-    this.bootValidationTypeArray = const [ValidationType.VALIDATE_SHA256],
+    this.bootValidationTypeArray = const [ValidationType.validateSHA256],
     Signing? signer,
     this.applicationFirmware,
     this.bootloaderFirmware,
@@ -193,28 +193,28 @@ class NRFUTIL{
   dynamic _manifest(List<FwType> type,List<String> fileName,List<int?> sizes){
     dynamic thingstoadd = {};
     for(int i = 0; i < type.length; i++){
-      if(type[i] == FwType.APPLICATION || type[i] == FwType.EXTERNAL_APPLICATION){
+      if(type[i] == FwType.application || type[i] == FwType.externalApplication){
         thingstoadd["application"] = {
           "bin_file": "${fileName[i]}.bin",
           "dat_file": "${fileName[i]}.dat",
         };
       }
-      else if(type[i] == FwType.SOFTDEVICE){
+      else if(type[i] == FwType.softdevice){
         thingstoadd["softdevice"] = {
           "bin_file": "${fileName[i]}.bin",
           "dat_file": "${fileName[i]}.dat",
         };
       }
-      else if(type[i] == FwType.BOOTLOADER){
+      else if(type[i] == FwType.bootloader){
         thingstoadd["bootloader"] = {
           "bin_file": "${fileName[i]}.bin",
           "dat_file": "${fileName[i]}.dat",
         };
       }
-      else if(type[i] == FwType.SOFTDEVICE_BOOTLOADER && sizes[0] == null){
+      else if(type[i] == FwType.softdeviceBootloader && sizes[0] == null){
         throw AssertionError('Soft Device and Bootloader must have sizes as well');
       }
-      else if(type[i] == FwType.SOFTDEVICE_BOOTLOADER){
+      else if(type[i] == FwType.softdeviceBootloader){
         thingstoadd["softdevice_bootloader"] = {
           "bin_file": "sd_bl.bin",
           "dat_file": "sd_bl.dat",
@@ -248,12 +248,12 @@ class NRFUTIL{
       String app = applicationFirmware!;
       firmware.add(IntelHex.decodeRecord(app).toBinArray(isApplication: true));
       fileNames.add('application');
-      key.add(FwType.APPLICATION);
+      key.add(FwType.application);
     }
     if(bootloaderFirmware != null || softDeviceFirmware != null){
       if(bootloaderFirmware != null && softDeviceFirmware != null){
         logger?.verbose("Bootloader and Softdevice Firmware to Bin array!");
-        key.add(FwType.SOFTDEVICE_BOOTLOADER);
+        key.add(FwType.softdeviceBootloader);
         fileNames.add('sd_bl');
         String app1 = softDeviceFirmware!;
         String app = bootloaderFirmware!;
@@ -269,14 +269,14 @@ class NRFUTIL{
         logger?.verbose("Bootloader Firmware to Bin array!");
         String app = bootloaderFirmware!;
         firmware.add(IntelHex.decodeRecord(app).toBinArray());
-        key.add(FwType.BOOTLOADER);
+        key.add(FwType.bootloader);
         fileNames.add('bootloader');
       }
       else if(softDeviceFirmware != null){
         logger?.verbose("Softdevice Firmware to Bin array!");
         String app = softDeviceFirmware!;
         firmware.add(IntelHex.decodeRecord(app).toBinArray());
-        key.add(FwType.SOFTDEVICE);
+        key.add(FwType.softdevice);
         fileNames.add('softdevice');
       }
     }
@@ -292,16 +292,16 @@ class NRFUTIL{
       int blSize = 0;
       int appSize = 0;
 
-      if(key[i] == FwType.APPLICATION || key[i] == FwType.EXTERNAL_APPLICATION){
+      if(key[i] == FwType.application || key[i] == FwType.externalApplication){
         appSize = binLength;
       }
-      else if(key[i] == FwType.SOFTDEVICE){
+      else if(key[i] == FwType.softdevice){
         sdSize = binLength;
       }
-      else if(key[i] == FwType.BOOTLOADER){
+      else if(key[i] == FwType.bootloader){
         blSize = binLength;
       }
-      else if(key[i] == FwType.SOFTDEVICE_BOOTLOADER){
+      else if(key[i] == FwType.softdeviceBootloader){
         blSize = fwdblsize!;
         sdSize = fwdsdsize!;
       }
@@ -309,8 +309,8 @@ class NRFUTIL{
       List<List<int>> bootValidationBytesArray = [];
 
       for(int x = 0; x < bootValidationTypeArray.length; x++){
-        if(bootValidationTypeArray[x]  == ValidationType.VALIDATE_ECDSA_P256_SHA256){
-          if(key[i] == FwType.SOFTDEVICE_BOOTLOADER){
+        if(bootValidationTypeArray[x]  == ValidationType.validateP256){
+          if(key[i] == FwType.softdeviceBootloader){
             bootValidationBytesArray.add(NRFPackage.signFirmware(signer,firmware[i]));
           }
           else{
@@ -325,7 +325,7 @@ class NRFUTIL{
       final InitPacket initPacket = InitPacket(
         fromBytes: null,
         hashBytes: firmwareHash,
-        hashType: HashType.SHA256,
+        hashType: HashType.sha256,
         bootValidationType: bootValidationTypeArray,
         bootValidationBytes: bootValidationBytesArray,
         dfuType: key[i],
@@ -339,7 +339,7 @@ class NRFUTIL{
       );
 
       final Uint8List sig = signer.sign(initPacket.getInitCommandBytes());
-      initPacket.setSignature(sig, SignatureType.ECDSA_P256_SHA256);
+      initPacket.setSignature(sig, SignatureType.ecdsaSHA256);
       signer.verify(initPacket.getInitCommandBytes());
 
       final Uint8List pack = initPacket.getPacketBytes();

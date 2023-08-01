@@ -7,10 +7,10 @@ class InitPacket{
   InitPacket({
     this.fromBytes,
     this.hashBytes,
-    this.hashType = HashType.NO_HASH,
+    this.hashType = HashType.noHash,
     this.bootValidationBytes,
     this.bootValidationType,
-    this.dfuType = FwType.APPLICATION,
+    this.dfuType = FwType.application,
     this.isDebug = false,
     this.fwVersion = 0xffffffff,
     this.hwVersion = 0xffffffff,
@@ -67,7 +67,7 @@ class InitPacket{
       );
       packet = pb.Packet(
         command: pb.Command(
-          opCode: OpCode.INIT,
+          opCode: OpCode.init,
           init: initCommand
         )
       );
@@ -94,16 +94,16 @@ class InitPacket{
   late pb.Packet packet;
 
   void _validate(){
-    if((initCommand.type == FwType.APPLICATION || initCommand.type == FwType.EXTERNAL_APPLICATION ) && initCommand.appSize == 0){
+    if((initCommand.type == FwType.application || initCommand.type == FwType.externalApplication ) && initCommand.appSize == 0){
         throw Exception("app_size is not set. It must be set when type is APPLICATION/EXTERNAL_APPLICATION");
     }
-    else if(initCommand.type == FwType.SOFTDEVICE && initCommand.sdSize == 0){
+    else if(initCommand.type == FwType.softdevice && initCommand.sdSize == 0){
         throw Exception("sd_size is not set. It must be set when type is SOFTDEVICE");
     }
-    else if(initCommand.type == FwType.BOOTLOADER && initCommand.blSize == 0){
+    else if(initCommand.type == FwType.bootloader && initCommand.blSize == 0){
         throw Exception("bl_size is not set. It must be set when type is BOOTLOADER");
     }
-    else if(initCommand.type == FwType.SOFTDEVICE_BOOTLOADER && (initCommand.sdSize == 0 || initCommand.blSize == 0)){
+    else if(initCommand.type == FwType.softdeviceBootloader && (initCommand.sdSize == 0 || initCommand.blSize == 0)){
         throw Exception("Either sd_size or bl_size is not set. Both must be set when type is SOFTDEVICE_BOOTLOADER");
     }
 

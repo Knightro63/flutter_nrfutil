@@ -265,8 +265,8 @@ class BLDFUSettings{
     int? customBootSettAddr, 
     bool noBackup = true,  
     int? backupAddress, 
-    ValidationType appValType = ValidationType.NO_VALIDATION, 
-    ValidationType sdValType = ValidationType.NO_VALIDATION, 
+    ValidationType appValType = ValidationType.noValidation, 
+    ValidationType sdValType = ValidationType.noValidation, 
     String? sdFile, 
     Signing? signer
   }){
@@ -313,18 +313,18 @@ class BLDFUSettings{
       bankCode = 0x1 & 0xffffffff;
 
       //Calculate Boot validation fields for app
-      if (appValType == ValidationType.VALIDATE_GENERATED_CRC){
+      if (appValType == ValidationType.validateCrc){
         appValTypeInt = 1 & 0xffffffff;
         appBootValidationBytes = Struct.pack('<I', appCrc);
       }
-      else if (appValType == ValidationType.VALIDATE_SHA256){
+      else if (appValType == ValidationType.validateSHA256){
         appValTypeInt = 2 & 0xffffffff;
         // Package.calculate_sha256_hash gives a reversed
         // digest. It need to be reversed back to a normal
         // sha256 digest.
-        appBootValidationBytes = Uint8List.fromList(NRFPackage.calculateSHA256(appBin,FwType.APPLICATION).reversed.toList());
+        appBootValidationBytes = Uint8List.fromList(NRFPackage.calculateSHA256(appBin,FwType.application).reversed.toList());
       }
-      else if (appValType == ValidationType.VALIDATE_ECDSA_P256_SHA256 && signer != null){
+      else if (appValType == ValidationType.validateP256 && signer != null){
         appValTypeInt = 3 & 0xffffffff;
         appBootValidationBytes = NRFPackage.signFirmware(signer, appBin);
       }
@@ -357,19 +357,19 @@ class BLDFUSettings{
       sdSize = NRFPackage.calculateFileSize(sdBin) & 0xffffffff;
 
       // Calculate Boot validation fields for SD
-      if (sdValType == ValidationType.VALIDATE_GENERATED_CRC){
+      if (sdValType == ValidationType.validateCrc){
         sdValTypeInt = 1 & 0xffffffff;
         int sdCrc = NRFPackage.calculateCRC(CRCType.crc32, sdBin) & 0xffffffff;
         sdBootValidationBytes = Struct.pack('<I', sdCrc);
       }
-      else if (sdValType == ValidationType.VALIDATE_SHA256){
+      else if (sdValType == ValidationType.validateSHA256){
         sdValTypeInt = 2 & 0xffffffff;
         // Package.calculate_sha256_hash gives a reversed
         // digest. It need to be reversed back to a normal
         // sha256 digest.
-        sdBootValidationBytes = Uint8List.fromList(NRFPackage.calculateSHA256(sdBin,FwType.SOFTDEVICE).reversed.toList());
+        sdBootValidationBytes = Uint8List.fromList(NRFPackage.calculateSHA256(sdBin,FwType.softdevice).reversed.toList());
       }
-      else if (sdValType == ValidationType.VALIDATE_ECDSA_P256_SHA256 && signer != null){
+      else if (sdValType == ValidationType.validateP256 && signer != null){
         sdValTypeInt = 3 & 0xffffffff;
         sdBootValidationBytes = NRFPackage.signFirmware(signer, sdBin);
       }

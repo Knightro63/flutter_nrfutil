@@ -4,8 +4,8 @@ import 'dfu_cc.pbenum.dart';
 export 'dfu_cc.pbenum.dart';
 
 class Hash extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Hash', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'dfu'), createEmptyInstance: create)
-    ..e<HashType>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'hashType', $pb.PbFieldType.QE, defaultOrMaker: HashType.NO_HASH, valueOf: HashType.valueOf, enumValues: HashType.values)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Hash', package: const $pb.PackageName($core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'dfu'), createEmptyInstance: create)
+    ..e<HashType>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'hashType', $pb.PbFieldType.QE, defaultOrMaker: HashType.noHash, valueOf: HashType.valueOf, enumValues: HashType.values)
     ..a<$core.List<$core.int>>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'hash', $pb.PbFieldType.QY)
   ;
 
@@ -25,20 +25,21 @@ class Hash extends $pb.GeneratedMessage {
   }
   factory Hash.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory Hash.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  Hash clone() => Hash()..mergeFromMessage(this);
+  @$core.override Hash clone() => Hash()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  Hash copyWith(void Function(Hash) updates) => super.copyWith((message) => updates(message as Hash)) as Hash; // ignore: deprecated_member_use
-  $pb.BuilderInfo get info_ => _i;
+  @$core.override Hash copyWith(void Function(Hash) updates) => super.copyWith((message) => updates(message as Hash)) as Hash; // ignore: deprecated_member_use
+  @$core.override $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static Hash create() => Hash._();
-  Hash createEmptyInstance() => create();
+  @$core.override Hash createEmptyInstance() => create();
   static $pb.PbList<Hash> createRepeated() => $pb.PbList<Hash>();
   @$core.pragma('dart2js:noInline')
   static Hash getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Hash>(create);
@@ -64,8 +65,8 @@ class Hash extends $pb.GeneratedMessage {
 }
 
 class BootValidation extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'BootValidation', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'dfu'), createEmptyInstance: create)
-    ..e<ValidationType>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'type', $pb.PbFieldType.QE, defaultOrMaker: ValidationType.NO_VALIDATION, valueOf: ValidationType.valueOf, enumValues: ValidationType.values)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'BootValidation', package: const $pb.PackageName($core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'dfu'), createEmptyInstance: create)
+    ..e<ValidationType>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'type', $pb.PbFieldType.QE, defaultOrMaker: ValidationType.noValidation, valueOf: ValidationType.valueOf, enumValues: ValidationType.values)
     ..a<$core.List<$core.int>>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'bytes', $pb.PbFieldType.QY)
   ;
 
@@ -89,16 +90,16 @@ class BootValidation extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  BootValidation clone() => BootValidation()..mergeFromMessage(this);
+  @$core.override BootValidation clone() => BootValidation()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  BootValidation copyWith(void Function(BootValidation) updates) => super.copyWith((message) => updates(message as BootValidation)) as BootValidation; // ignore: deprecated_member_use
-  $pb.BuilderInfo get info_ => _i;
+  @$core.override BootValidation copyWith(void Function(BootValidation) updates) => super.copyWith((message) => updates(message as BootValidation)) as BootValidation; // ignore: deprecated_member_use
+  @$core.override $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static BootValidation create() => BootValidation._();
-  BootValidation createEmptyInstance() => create();
+  @$core.override BootValidation createEmptyInstance() => create();
   static $pb.PbList<BootValidation> createRepeated() => $pb.PbList<BootValidation>();
   @$core.pragma('dart2js:noInline')
   static BootValidation getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<BootValidation>(create);
@@ -124,11 +125,11 @@ class BootValidation extends $pb.GeneratedMessage {
 }
 
 class InitCommand extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'InitCommand', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'dfu'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'InitCommand', package: const $pb.PackageName($core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'dfu'), createEmptyInstance: create)
     ..a<$core.int>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'fwVersion', $pb.PbFieldType.OU3)
     ..a<$core.int>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'hwVersion', $pb.PbFieldType.OU3)
     ..p<$core.int>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'sdReq', $pb.PbFieldType.KU3)
-    ..e<FwType>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: FwType.APPLICATION, valueOf: FwType.valueOf, enumValues: FwType.values)
+    ..e<FwType>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: FwType.application, valueOf: FwType.valueOf, enumValues: FwType.values)
     ..a<$core.int>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'sdSize', $pb.PbFieldType.OU3)
     ..a<$core.int>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'blSize', $pb.PbFieldType.OU3)
     ..a<$core.int>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'appSize', $pb.PbFieldType.OU3)
@@ -189,16 +190,16 @@ class InitCommand extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  InitCommand clone() => InitCommand()..mergeFromMessage(this);
+  @$core.override InitCommand clone() => InitCommand()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  InitCommand copyWith(void Function(InitCommand) updates) => super.copyWith((message) => updates(message as InitCommand)) as InitCommand; // ignore: deprecated_member_use
-  $pb.BuilderInfo get info_ => _i;
+  @$core.override InitCommand copyWith(void Function(InitCommand) updates) => super.copyWith((message) => updates(message as InitCommand)) as InitCommand; // ignore: deprecated_member_use
+  @$core.override $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static InitCommand create() => InitCommand._();
-  InitCommand createEmptyInstance() => create();
+  @$core.override InitCommand createEmptyInstance() => create();
   static $pb.PbList<InitCommand> createRepeated() => $pb.PbList<InitCommand>();
   @$core.pragma('dart2js:noInline')
   static InitCommand getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<InitCommand>(create);
@@ -286,7 +287,7 @@ class InitCommand extends $pb.GeneratedMessage {
 }
 
 class ResetCommand extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ResetCommand', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'dfu'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ResetCommand', package: const $pb.PackageName($core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'dfu'), createEmptyInstance: create)
     ..a<$core.int>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'timeout', $pb.PbFieldType.QU3)
   ;
 
@@ -306,16 +307,16 @@ class ResetCommand extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  ResetCommand clone() => ResetCommand()..mergeFromMessage(this);
+  @$core.override ResetCommand clone() => ResetCommand()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ResetCommand copyWith(void Function(ResetCommand) updates) => super.copyWith((message) => updates(message as ResetCommand)) as ResetCommand; // ignore: deprecated_member_use
-  $pb.BuilderInfo get info_ => _i;
+  @$core.override ResetCommand copyWith(void Function(ResetCommand) updates) => super.copyWith((message) => updates(message as ResetCommand)) as ResetCommand; // ignore: deprecated_member_use
+  @$core.override $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ResetCommand create() => ResetCommand._();
-  ResetCommand createEmptyInstance() => create();
+  @$core.override ResetCommand createEmptyInstance() => create();
   static $pb.PbList<ResetCommand> createRepeated() => $pb.PbList<ResetCommand>();
   @$core.pragma('dart2js:noInline')
   static ResetCommand getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ResetCommand>(create);
@@ -332,8 +333,8 @@ class ResetCommand extends $pb.GeneratedMessage {
 }
 
 class Command extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Command', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'dfu'), createEmptyInstance: create)
-    ..e<OpCode>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'opCode', $pb.PbFieldType.OE, defaultOrMaker: OpCode.RESET, valueOf: OpCode.valueOf, enumValues: OpCode.values)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Command', package: const $pb.PackageName($core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'dfu'), createEmptyInstance: create)
+    ..e<OpCode>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'opCode', $pb.PbFieldType.OE, defaultOrMaker: OpCode.reset, valueOf: OpCode.valueOf, enumValues: OpCode.values)
     ..aOM<InitCommand>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'init', subBuilder: InitCommand.create)
     ..aOM<ResetCommand>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'reset', subBuilder: ResetCommand.create)
   ;
@@ -362,16 +363,16 @@ class Command extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  Command clone() => Command()..mergeFromMessage(this);
+  @$core.override Command clone() => Command()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  Command copyWith(void Function(Command) updates) => super.copyWith((message) => updates(message as Command)) as Command; // ignore: deprecated_member_use
-  $pb.BuilderInfo get info_ => _i;
+  @$core.override Command copyWith(void Function(Command) updates) => super.copyWith((message) => updates(message as Command)) as Command; // ignore: deprecated_member_use
+  @$core.override $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static Command create() => Command._();
-  Command createEmptyInstance() => create();
+  @$core.override Command createEmptyInstance() => create();
   static $pb.PbList<Command> createRepeated() => $pb.PbList<Command>();
   @$core.pragma('dart2js:noInline')
   static Command getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Command>(create);
@@ -410,9 +411,9 @@ class Command extends $pb.GeneratedMessage {
 }
 
 class SignedCommand extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'SignedCommand', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'dfu'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'SignedCommand', package: const $pb.PackageName($core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'dfu'), createEmptyInstance: create)
     ..aQM<Command>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'command', subBuilder: Command.create)
-    ..e<SignatureType>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'signatureType', $pb.PbFieldType.QE, defaultOrMaker: SignatureType.ECDSA_P256_SHA256, valueOf: SignatureType.valueOf, enumValues: SignatureType.values)
+    ..e<SignatureType>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'signatureType', $pb.PbFieldType.QE, defaultOrMaker: SignatureType.ecdsaSHA256, valueOf: SignatureType.valueOf, enumValues: SignatureType.values)
     ..a<$core.List<$core.int>>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'signature', $pb.PbFieldType.QY)
   ;
 
@@ -440,16 +441,16 @@ class SignedCommand extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  SignedCommand clone() => SignedCommand()..mergeFromMessage(this);
+  @$core.override SignedCommand clone() => SignedCommand()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  SignedCommand copyWith(void Function(SignedCommand) updates) => super.copyWith((message) => updates(message as SignedCommand)) as SignedCommand; // ignore: deprecated_member_use
-  $pb.BuilderInfo get info_ => _i;
+  @$core.override SignedCommand copyWith(void Function(SignedCommand) updates) => super.copyWith((message) => updates(message as SignedCommand)) as SignedCommand; // ignore: deprecated_member_use
+  @$core.override $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static SignedCommand create() => SignedCommand._();
-  SignedCommand createEmptyInstance() => create();
+  @$core.override SignedCommand createEmptyInstance() => create();
   static $pb.PbList<SignedCommand> createRepeated() => $pb.PbList<SignedCommand>();
   @$core.pragma('dart2js:noInline')
   static SignedCommand getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SignedCommand>(create);
@@ -486,7 +487,7 @@ class SignedCommand extends $pb.GeneratedMessage {
 }
 
 class Packet extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Packet', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'dfu'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Packet', package: const $pb.PackageName($core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'dfu'), createEmptyInstance: create)
     ..aOM<Command>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'command', subBuilder: Command.create)
     ..aOM<SignedCommand>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'signedCommand', subBuilder: SignedCommand.create)
   ;
@@ -511,16 +512,16 @@ class Packet extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  Packet clone() => Packet()..mergeFromMessage(this);
+  @$core.override Packet clone() => Packet()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  Packet copyWith(void Function(Packet) updates) => super.copyWith((message) => updates(message as Packet)) as Packet; // ignore: deprecated_member_use
-  $pb.BuilderInfo get info_ => _i;
+  @$core.override Packet copyWith(void Function(Packet) updates) => super.copyWith((message) => updates(message as Packet)) as Packet; // ignore: deprecated_member_use
+  @$core.override $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static Packet create() => Packet._();
-  Packet createEmptyInstance() => create();
+  @$core.override Packet createEmptyInstance() => create();
   static $pb.PbList<Packet> createRepeated() => $pb.PbList<Packet>();
   @$core.pragma('dart2js:noInline')
   static Packet getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Packet>(create);

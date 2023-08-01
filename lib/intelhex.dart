@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'dart:math';
 import 'package:bisection/bisection.dart';
 import 'package:nrfutil/struct.dart';
+import 'package:nrfutil/terminal/logger.dart';
 import 'package:path/path.dart' as path;
 
 /// NRF Architextures supported
@@ -153,7 +154,7 @@ class IntelHex{
     for(dynamic i in otherBuf.keys){//(i in other_buf){
       if (thisBuf.containsKey(i)){
         if (overlap == Overlap.error){
-          print('Data overlapped at address 0x$i');
+          logger?.verbose('Data overlapped at address 0x$i');
         }
         else if(overlap == Overlap.ignore){
           continue;
@@ -269,7 +270,6 @@ class IntelHex{
   /// Create a String to place in the file from the buffer to hex
   String getHexFile(){
     String file = '';
-    print(buffer);
     for(int i in buffer.keys){
       file += ':${hexlify([i,buffer[i]!])}\n';
     }
@@ -380,7 +380,7 @@ class IntelHex{
         fwrite += ':${hexlify(bin)}$eol';//.translate(table)
       }
       else{
-        print('InvalidStartAddressValueError(start_addr=start_addr)');
+        logger?.verbose('InvalidStartAddressValueError(start_addr=start_addr)');
       }
     }
 
