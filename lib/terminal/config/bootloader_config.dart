@@ -6,8 +6,16 @@ import 'package:json_annotation/json_annotation.dart';
   checked: true,
 )
 
+/// Bootloader configuration
+/// 
+/// ```dart
+/// BootloaderConfig(
+///   path, //path to bootloader file
+///   version, //version of the bootloader defaults to 0xFFFFFFFF
+/// };
+/// ```
 class BootloaderConfig {
-  /// Image path for web
+  /// Path to bootloader
   @JsonKey(name: 'path')
   final String? path;
 
@@ -48,6 +56,7 @@ class BootloaderConfig {
     };
   }
 
+  /// Converts [BootloaderConfig] to [String]
   @override
   String toString() => 'BootloaderConfig: ${toJson()}';
 }

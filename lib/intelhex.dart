@@ -6,12 +6,21 @@ import 'package:nrfutil/struct.dart';
 import 'package:path/path.dart' as path;
 
 /// NRF Architextures supported
+/// nrf51,nrf52,nrf52840
 enum NRFArch{nrf51,nrf52,nrf52840}
 /// Soft Device variants supported
 enum SoftDeviceVariant{s1x0,s132,unknown}
+/// Overlap hex locations
 enum Overlap{error,ignore,replace}
+/// End of file for hex file
 enum EOLStyle{native,crlf}
 /// This is used to create the hex file that uploads to the device.
+/// ```dart
+/// IntelHex(
+///   offset,
+///   padding
+/// )
+/// ```
 class IntelHex{
   IntelHex({
     this.offset = 0,
@@ -55,6 +64,7 @@ class IntelHex{
   void operator []=(int addr, int value) => puts(addr,Uint8List.fromList([value]));
   int operator [](int addr) => gets(addr,1);
 
+  /// Set the buffer with this new start address and the step
   void setSubList(int startAddress, [int? endAddress, int step = 1]){
     Map<int,int> newBuffer = {};
     int length = buffer.length;
@@ -79,6 +89,7 @@ class IntelHex{
     buffer = newBuffer;
   }
 
+  /// get the buffer at this address
   int gets(int addr, int length){
     //Get string of bytes from given address. If any entries are blank
     //from addr through addr+length, a NotEnoughDataError exception will
@@ -94,7 +105,7 @@ class IntelHex{
     }
     return int.parse('0x$a');
   }
-
+  /// get this buffer list from this address up to this length
   Uint8List getsAsList(int addr, int length){
     Uint8List l = Uint8List(length);
     try{
@@ -108,29 +119,29 @@ class IntelHex{
 
     return l;
   }
-
+  /// put this list in the buffer starting at this address
   void puts(int addr, Uint8List s){
     //Put string of bytes at given address. Will overwrite any previous entries.
     for(int i = 0; i < s.length;i++){//i in range_g(len(a)){
       buffer[addr+i] = s[i];
     }
   }
-  void merge(IntelHex other, [Overlap overlap = Overlap.error]){
-    // Merge content of other IntelHex object into current object (self).
-    // @param  other   other IntelHex object.
-    // @param  overlap action on overlap of data or starting addr:
-    //                 - error: raising OverlapError;
-    //                 - ignore: ignore other data and keep current data
-    //                           in overlapping region;
-    //                 - replace: replace data with other data
-    //                           in overlapping region.
 
-    // @raise  TypeError       if other is not instance of IntelHex
-    // @raise  ValueError      if other is the same object as self 
-    //                         (it can't merge itself)
-    // @raise  ValueError      if overlap argument has incorrect value
-    // @raise  AddressOverlapError    on overlapped data
-    
+  /// Merge content of other IntelHex object into current object (self).
+  /// [other]   other IntelHex object.
+  /// [overlap] action on overlap of data or starting addr:
+  ///                 - error: raising OverlapError;
+  ///                 - ignore: ignore other data and keep current data
+  ///                           in overlapping region;
+  ///                 - replace: replace data with other data
+  ///                           in overlapping region.
+
+  /// @raise  TypeError       if other is not instance of IntelHex
+  /// @raise  ValueError      if other is the same object as self 
+  ///                         (it can't merge itself)
+  /// @raise  ValueError      if overlap argument has incorrect value
+  /// @raise  AddressOverlapError    on overlapped data
+  void merge(IntelHex other, [Overlap overlap = Overlap.error]){
     // check args
     if(other == this){
       throw("Can't merge itself");
@@ -171,9 +182,10 @@ class IntelHex{
       }
     }
   }
+
+  /// Convert to buffer dictionary.
+  /// return new buffer.
   Map<dynamic,int> todict(){
-    //Convert to python dictionary.
-    //@return         dict suitable for initializing another IntelHex object.
     final Map<dynamic,int> r = buffer;
     if (startAddr != null){
       r['start_addr'] = startAddr!;
@@ -254,7 +266,7 @@ class IntelHex{
   int maxaddr(){
     return buffer.keys.last;
   }
-
+  /// Create a String to place in the file from the buffer to hex
   String getHexFile(){
     String file = '';
     print(buffer);
@@ -264,6 +276,8 @@ class IntelHex{
 
     return file;
   }
+
+  /// Convert hex file to [IntelHex]
   static IntelHex fromfile(String filePath){
     String stringFile = File(path.join(filePath)).readAsStringSync();
     return IntelHex.decodeRecord(stringFile);
@@ -300,19 +314,18 @@ class IntelHex{
     //_get_eol_textfile = staticmethod(_get_eol_textfile);
   }
 
+  /// Write data to file f in HEX format.
+  /// 
+  /// [f]                   filename or file-like object for writing
+  /// [writeStartAddr]    enable or disable writing start address
+  ///                             record to file (enabled by default).
+  ///                             If there is no start address in obj, nothing
+  ///                             will be written regardless of this setting.
+  /// [eolstyle]            can be used to force CRLF line-endings
+  ///                             for output file on different platforms.
+  ///                             Supported eol styles: 'native', 'CRLF'.
+  /// [byteCount]           number of bytes in the data field
   String bufferToHex({bool writeStartAddr = true, EOLStyle eolstyle = EOLStyle.native, int byteCount = 16}){
-    // Write data to file f in HEX format.
-
-    // @param  f                   filename or file-like object for writing
-    // @param  write_start_addr    enable or disable writing start address
-    //                             record to file (enabled by default).
-    //                             If there is no start address in obj, nothing
-    //                             will be written regardless of this setting.
-    // @param  eolstyle            can be used to force CRLF line-endings
-    //                             for output file on different platforms.
-    //                             Supported eol styles: 'native', 'CRLF'.
-    // @param byteCount           number of bytes in the data field
-    
     if (byteCount > 255 || byteCount < 1){
       throw("wrong byteCount value: $byteCount");
     }
@@ -459,7 +472,7 @@ class IntelHex{
     fwrite += ":00000001FF$eol";
     return fwrite;
   }
-
+  /// Convert List int to hex string
   static String hexlify(List<int> hexList){
     String htb = '';
     for(int i = 0; i < hexList.length; i++){
@@ -467,6 +480,7 @@ class IntelHex{
     }
     return htb;
   }
+  /// Merge hex files to one file
   static String mergeHex(List<String?> fileData){
     String value = '';
 

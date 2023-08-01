@@ -13,7 +13,7 @@ import 'protoc/dfu_cc.pbenum.dart';
 /// nrf Utils modes either debug or release form.
 enum NRFUtilMode{debug,release}
 
-/// 
+/// The expected crc types for the dfu package
 enum CRCType{crc16,crc32}
 
 /// Soft Device types in the form of hex values
@@ -116,7 +116,20 @@ enum SoftDeviceTypes{
 /// 
 /// To generate the zip file with all the information to send to a device via OTA 
 /// ```dart
-/// NRFUTIL().generate();
+/// NRFUTIL(
+///   mode = NRFUtilMode.release,
+///   this.hardwareVersion = 0xFFFFFFFF,
+///   this.applicationVersion = 0xFFFFFFFF,
+///   this.bootloaderVersion = 0xFFFFFFFF,
+///   this.softDeviceReqType = SoftDeviceTypes.s132NRF52d611,
+///   this.bootValidationTypeArray = const [ValidationType.VALIDATE_SHA256],
+///   Signing? signer,
+///   this.applicationFirmware,
+///   this.bootloaderFirmware,
+///   this.softDeviceFirmware,
+///   this.keyFile,
+//    this.comment,
+/// ).generate();
 /// ```
 class NRFUTIL{
   NRFUTIL({
@@ -337,9 +350,6 @@ class NRFUTIL{
     archive.addFile(ArchiveFile('manifest.json', mani.length, mani));
     return NRFPackage.createZipFile(archive);
   }
-  
-
-
 }
 
 class NRFPackage{

@@ -19,6 +19,24 @@ import 'package:path/path.dart' as path;
   anyMap: true,
   checked: true,
 )
+
+/// Settings configuration for uploading the application without using bootloader.
+/// This is needed everytime the application is changed.
+/// 
+/// ```dart
+/// Config(
+///  debug, //Is this a debug or release file
+///  exportPath, //Path to export the files to
+///  softdeviceConfig, //Softdevice Config
+///  applicationConfig, //Application Config
+///  bootloaderConfig, //Bootloader Config
+///  settingsConfig, //Settins Config
+///  sofDeviceReqType,
+///  hardwareVersion, //hardware version 51 or 52
+///  keyfileConfig, //Key file config
+///  comment //Comment in the hex or bin file
+/// };
+/// ```
 class Config {
   /// Creates an instance of [Config]
   const Config({
@@ -34,7 +52,7 @@ class Config {
     this.comment,
   });
 
-  /// Loads flutter configs from given [filePath]
+  /// Loads flutter configs from given [ArgResults]
   static Config? loadConfigFromArgResults(ArgResults results) {
     return Config.fromJson({
       'softdevice_type': results['sd_type'],
@@ -111,42 +129,42 @@ class Config {
     }
   }
 
-  /// Generic image_path
+  /// Debug mode
   final bool debug;
 
-  /// Image path specific to android
+  /// Softdevice type
   @JsonKey(name: 'softdevice_type')
   final String sofDeviceReqType;
 
-  /// Image path specific to ios
+  /// Commets in the generated hex of bin file
   @JsonKey(name: 'comment')
   final String? comment;
 
-  /// Image path specific to ios
+  /// Version of the hardware 52 or 51
   @JsonKey(name: 'hardware_version')
   final int hardwareVersion;
 
-  /// Image path specific to ios
+  /// Export the files to this path
   @JsonKey(name: 'export_path')
   final String? exportPath;
 
-  /// Web platform config
+  /// Softdevice configuration
   @JsonKey(name: 'softdevice')
   final SoftDeviceConfig softdeviceConfig;
 
-  /// Windows platform config
+  /// Application Configuration
   @JsonKey(name: 'application')
   final ApplicationConfig applicationConfig;
 
-  /// MacOS platform config
+  /// Bootloader configuration
   @JsonKey(name: 'bootloader')
   final BootloaderConfig bootloaderConfig;
 
-  /// MacOS platform config
+  /// Key file config
   @JsonKey(name: 'keyfile')
   final KeyFileConfig? keyfileConfig;
 
-  /// MacOS platform config
+  /// Settings config
   @JsonKey(name: 'settings')
   final SettingsConfig? settingsConfig;
 
@@ -207,7 +225,7 @@ class Config {
       'hardware_version': hardwareVersion
     };
   }
-
+  /// Converts [Config] to [String]
   @override
   String toString() => 'FlutterLauncherIconsConfig: ${toJson()}';
 }

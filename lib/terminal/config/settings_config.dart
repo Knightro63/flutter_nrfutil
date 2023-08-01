@@ -6,12 +6,32 @@ import 'package:json_annotation/json_annotation.dart';
   checked: true,
 )
 
+/// Settings configuration for uploading the application without using bootloader.
+/// This is needed everytime the application is changed.
+/// 
+/// ```dart
+/// SettingsConfig(
+///  generate, //generate a new settings file
+///  sdValType, //softdevice validation type 'p256' #null,'p256','crc','sha256'
+///  appValType, //application validation type 'p256' #null,'p256','crc','sha256'
+///  path, //path to settings file with the settings to copy
+///  noBackup, //allow backup of the settings file
+///  blSettVersion = 1, //This is the type of settings file generated 1 for sdk <=12.0 to >15.3, 2 for 15.3 to 17.0
+///  arch, //Arch types are 'NRF51','NRF52','NRF52QFAB','NRF52810',or 'NRF52840'
+///  backupAddress, //address to place the backup settings file
+///  customBootSettAddr //Place the boot settings in this new location
+/// };
+/// ```
 class SettingsConfig {
   /// Specifies weather to generate siging key file
   final bool generate;
+  /// Create a backup of the settings file
   final bool noBackup;
+  /// Bootloader settings version 1 or 2
   final int blSettVersion;
+  /// Address to place backup settings
   final int? backupAddress;
+  /// Place the settings starting at this address
   final int? customBootSettAddr;
 
   /// Softdevice Validation type
@@ -22,11 +42,11 @@ class SettingsConfig {
   @JsonKey(name: 'app_val_type')
   final String? appValType;
 
-  /// Application validation type
+  /// Architexture used for this application
   @JsonKey(name: 'arch')
   final String? arch;
 
-  /// Application validation type
+  /// Import the settings of a previous file mainly used for confirmation the program is working
   @JsonKey(name: 'import_settings')
   final String? path;
 
@@ -85,7 +105,7 @@ class SettingsConfig {
       'import_settings': path
     };
   }
-
+  /// Converts [SettingsConfig] to [String]
   @override
   String toString() => 'SettingsConfig: ${toJson()}';
 }

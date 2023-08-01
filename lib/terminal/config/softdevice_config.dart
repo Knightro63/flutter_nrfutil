@@ -1,13 +1,21 @@
 import 'package:json_annotation/json_annotation.dart';
 
-/// The nrfutil configuration set for Web
+/// The nrfutil configuration set for softdevice
 @JsonSerializable(
   anyMap: true,
   checked: true,
 )
 
+/// SoftDevice configuration
+/// 
+/// ```dart
+/// SoftDeviceConfig(
+///   path, //path to softdevice file
+///   version, //version of the softdevice defaults to 0xFFFFFFFF
+/// };
+/// ```
 class SoftDeviceConfig {
-  /// Image path for web
+  /// Path to softdevice file
   @JsonKey(name: 'path')
   final String? path;
 
@@ -48,7 +56,7 @@ class SoftDeviceConfig {
       'path': path,
     };
   }
-
+  /// Converts [SoftDeviceConfig] to [String]
   @override
   String toString() => 'SoftDeviceConfig: ${toJson()}';
 }

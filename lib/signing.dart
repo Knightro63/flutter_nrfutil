@@ -6,6 +6,13 @@ import 'package:nrfutil/terminal/logger.dart';
 /// The types of key signing are pem files or c code.
 enum SigningKeyType{code,pem}
 
+/// This is a return type for generating Singing key.
+///
+/// This returns:
+/// pem type private key
+/// pem type public key
+/// c code for public key
+/// Zip file which includes all the key types
 class SigningKeyData{
   SigningKeyData({
     required this.privateKey,
@@ -67,36 +74,23 @@ class SigningKey{
 /// ```
 class Signing{
   Signing({
-    dynamic privateKey,
-    dynamic publicKey,
+    String? privateKey,
+    String? publicKey,
     bool isVerbose = false
   }){
     if(privateKey != null){
-      if(privateKey is String){
-        loadPrivateKeyFromPem(privateKey);
-      }
-      else if(privateKey is Uint8List){
-        loadPrivateKeyFromBytes(privateKey);
-      }
-    }
-    else{
-      loadPrivateKeyFromPem();
+      _loadPrivateKeyFromPem(privateKey);
     }
 
     if(publicKey != null){
-      if(publicKey is String){
-        if(publicKey.contains('-----BEGIN')){
-          loadPublicKeyFromPem(publicKey);
-        }
-        else if(publicKey.contains('__ALIGN(4)')){
-          loadPublicKeyFromCode(publicKey);
-        }
-        else{
-          throw'Error Failed to load Public Key!';
-        }
+      if(publicKey.contains('-----BEGIN')){
+        _loadPublicKeyFromPem(publicKey);
       }
-      else if(publicKey is Uint8List){
-        loadPublicKeyFromBytes(publicKey);
+      else if(publicKey.contains('__ALIGN(4)')){
+        _loadPublicKeyFromCode(publicKey);
+      }
+      else{
+        throw'Error Failed to load Public Key!';
       }
     }
   }
@@ -109,10 +103,9 @@ class Signing{
   -----END EC PRIVATE KEY-----""";
   List<int> signature = [];
 
-  /// Creates a zip file that contains both a public and private key.
-  /// The public key can be in the form of c code or pem file. 
+  /// Create SingingKeyData which includes a zip file that contains both a public and private key.
+  /// The public key is in the form of c code and pem file in SingingKeyData. 
   ///
-  /// To export as pem file change `publicKeyType = SigningKeyType.pem`
   /// To export a zip file with all the needed keys, call [generateKey].
   static SigningKeyData generateKey({NRFLogger? logger}){
     late String pbkc;
@@ -151,6 +144,7 @@ class Signing{
       publicKeyPem: pbkpem
     );
   }
+  /// Generates the code form of the public key.
   static String _generateCodeKey(ECPublicKey ecpbk){
     Uint8List pbke = ecpbk.Q!.getEncoded(false);
     List<int> pbkList = (pbke.sublist(1,33).reversed.toList()+pbke.sublist(33,65).reversed.toList());
@@ -176,27 +170,27 @@ __ALIGN(4) const uint8_t pk[64] ={
 """;
   }
   /// Loads a private key from Pem file.
-  void loadPrivateKeyFromPem([String? key]){
+  void _loadPrivateKeyFromPem([String? key]){
     logger?.verbose('Loading Private Key From Pem.');
     signingKey.privateKey = key == null?CryptoUtils.ecPrivateKeyFromPem(defaultKey):CryptoUtils.ecPrivateKeyFromPem(key);
   }
   /// Loads a private key from Uint8List.
-  void loadPrivateKeyFromBytes(Uint8List? bytes){
+  void _loadPrivateKeyFromBytes(Uint8List? bytes){
     logger?.verbose('Loading Private Key From Bytes.');
     signingKey.privateKey = bytes == null?CryptoUtils.ecPrivateKeyFromPem(defaultKey):CryptoUtils.ecPrivateKeyFromDerBytes(bytes);
   }
   /// Loads a public key from Uint8List.
-  void loadPublicKeyFromBytes(Uint8List bytes){
+  void _loadPublicKeyFromBytes(Uint8List bytes){
     logger?.verbose('Loading Public Key From Bytes.');
     signingKey.publicKey = CryptoUtils.ecPublicKeyFromDerBytes(bytes);
   }
   /// Loads a public key from PEM file.
-  void loadPublicKeyFromPem(String key){
+  void _loadPublicKeyFromPem(String key){
     logger?.verbose('Loading Public Key From Pem.');
     signingKey.publicKey = CryptoUtils.ecPublicKeyFromPem(key);
   }
   /// Loads a public key from PEM file.
-  void loadPublicKeyFromCode(String key){
+  void _loadPublicKeyFromCode(String key){
     logger?.verbose('Loading Public Key From Code.');
     String hexString = key.split('{')[1].replaceAll('};', '').replaceAll(' ', '').replaceAll('\n', '');
     List<String> data = hexString.split(',');
@@ -217,16 +211,16 @@ __ALIGN(4) const uint8_t pk[64] ={
     if(!signingKey.hasPrivateKey) throw Exception("Can't save key. No key created/loaded");
     ECSignature es = CryptoUtils.ecSign(signingKey.privateKey!, dataToSign, algorithmName: 'SHA-256/ECDSA');
     signingKey.signature = es;
-    List<int> r = bigIntToUint8List(es.r).reversed.toList();
-    List<int> s = bigIntToUint8List(es.s).reversed.toList();
+    List<int> r = _bigIntToUint8List(es.r).reversed.toList();
+    List<int> s = _bigIntToUint8List(es.s).reversed.toList();
     return Uint8List.fromList(r+s);
   }
 
   /// Change Big int to Uint8List.
-  Uint8List bigIntToUint8List(BigInt bigInt) => bigIntToByteData(bigInt).buffer.asUint8List();
+  Uint8List _bigIntToUint8List(BigInt bigInt) => _bigIntToByteData(bigInt).buffer.asUint8List();
 
   /// Change Big int to byte data list.
-  ByteData bigIntToByteData(BigInt bigInt) {
+  ByteData _bigIntToByteData(BigInt bigInt) {
     final data = ByteData((bigInt.bitLength / 8).ceil());
     BigInt newBigInt = bigInt;
 

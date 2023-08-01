@@ -6,12 +6,20 @@ import 'package:json_annotation/json_annotation.dart';
   checked: true,
 )
 
+/// Application configuration
+/// 
+/// ```dart
+/// ApplicationConfig(
+///   path, //path to application file
+///   version, //version of the application defaults to 0xFFFFFFFF
+/// };
+/// ```
 class ApplicationConfig {
-  /// Image path for web
+  /// Path to application file
   @JsonKey(name: 'path')
   final String? path;
 
-  /// manifest.json's background_color
+  /// Version of the application provided
   @JsonKey(name: 'version')
   final int version;
 
@@ -47,7 +55,7 @@ class ApplicationConfig {
       'path': path,
     };
   }
-
+  /// Converts [ApplicationConfig] to [String]
   @override
   String toString() => 'ApplicationConfig: ${toJson()}';
 }

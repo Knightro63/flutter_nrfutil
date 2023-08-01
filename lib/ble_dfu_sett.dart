@@ -35,7 +35,6 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // #
 
-// 3rd party libraries
 import 'dart:typed_data';
 import 'package:archive/archive_io.dart';
 import 'package:nrfutil/intelhex.dart';
@@ -44,12 +43,14 @@ import 'package:nrfutil/protoc/dfu_cc.pbserver.dart';
 import 'package:nrfutil/struct.dart';
 import 'package:nrfutil/terminal/logger.dart';
 
+/// add the ability to get int to hex string easier
 extension on int{
   String hexilfy([int padding = 8]){
     return '0x${toRadixString(16).padLeft(padding,'0').toUpperCase()}';
   }
 }
 
+/// Bootloader for DFU setting version 1
 class BLDFUSettingsStructV1{
   BLDFUSettingsStructV1(int settingsAddress,bool isV1Only){
     logger?.verbose('Setting bl dfu Setting V1');
@@ -102,6 +103,7 @@ class BLDFUSettingsStructV1{
   }
 }
 
+/// Bootloader for DFU setting version 2
 class BLDFUSettingsStructV2 extends BLDFUSettingsStructV1{
   BLDFUSettingsStructV2(int settingsAddress):super(settingsAddress,false){
     logger?.verbose('Setting bl dfu Setting V2');
@@ -142,7 +144,23 @@ class BLDFUSettingsStructV2 extends BLDFUSettingsStructV1{
     }.toString();
   }
 }
-
+  /// Generate settings file from the provided data
+  /// ```dart
+  ///  String settingsFile = BLDFUSettings().generate(
+  ///   arch, ///Arch types are 'NRF51','NRF52','NRF52QFAB','NRF52810',or 'NRF52840'
+  ///   appFile, //App file 
+  ///   appVersion, //application version 
+  ///   blVersion, //bootloader version 
+  ///   blSettVersion, // Settings version 1 or 2
+  ///   customBootSettAddr, // Start settings at this address
+  ///   noBackup, // Create a backup at this address 
+  ///   backupAddress, //Place the backup at this address
+  ///   appValType, //ValidationType.NO_VALIDATION 
+  ///   sdValType, //ValidationType.NO_VALIDATION, 
+  ///   sdFile, //softdevice file
+  ///   signer //Signed whith this
+  /// );
+  /// ```
 class BLDFUSettings{
   final int flashPage51Sz      = 0x400;
   final int flashPage52Sz      = 0x1000;
@@ -176,6 +194,7 @@ class BLDFUSettings{
   late int appValType;
   late int crc;
 
+  /// Set the architexture for this application and softdevice
   void setArch(String arch){
     logger?.verbose('Setting Arch to $arch');
     if(arch == 'NRF51'){
@@ -219,6 +238,7 @@ class BLDFUSettings{
   int _getValueFromHex(int addr, [int size=4, String format='<I']){
     return Struct.unpack(format,ihex.getsAsList(addr, size)) & 0xffffffff;
   }
+  /// Calculate CRC32 int from hex file
   int calculateCRC32FromHex(IntelHex ihObject, [int? startAddr,int? endAddr]){
     logger?.verbose('Calculate CRC32 From Hex');
     List<int> list = [];
@@ -235,7 +255,7 @@ class BLDFUSettings{
     } 
     return getCrc32(list) & 0xFFFFFFFF;//binascii.crc32(bytearray(list)) & 0xFFFFFFFF;
   }
-
+  /// Generate settings file from the provided data
   String generate({
     String arch = 'NRF52', 
     String? appFile, 
@@ -427,7 +447,8 @@ class BLDFUSettings{
     logger?.verbose('Coverting data to Hex String');
     return ihex.bufferToHex();
   }
-
+  /// Get settings from the provided file.
+  /// This is used to check if the generated data was correct.
   void probeSettings(int base){
     logger?.verbose('Probing for Settings');
     // Unpack CRC and version
@@ -494,7 +515,7 @@ class BLDFUSettings{
     logger?.verbose('BLE Settings Version: $ver');
     logger?.verbose(temp);
   }
-
+  /// Find the correct Arch for the provided settings file
   void fromHexFile(String stringFile, [NRFArch? arch]){
     logger?.verbose('Retreiving Hex File');
     hexFile = stringFile;

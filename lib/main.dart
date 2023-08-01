@@ -17,6 +17,7 @@ const String flavorConfigFilePattern = r'^nrfutil-(.*).yaml$';
 String importPath = '';
 const List<String> prefixOptions = ['path','help','verbose','keyfile','application','bootloader','softdevice','export','app_version','boot_version','sd_version', 'debug', 'comment', 'sd_type','generate_key','public_key','private_key','hardware_version','generate_settings','merge'];
 
+/// Using the flags set in the terminal and the provided information in the yaml file create the requested information
 Future<void> createFromArguments(List<String> arguments) async {
   final ArgParser parser = ArgParser(allowTrailingOptions: true);
   parser
@@ -169,7 +170,7 @@ Future<void> createFromArguments(List<String> arguments) async {
     exit(2);
   }
 }
-
+/// Create the requested files from the information from provided in the yaml file.
 Future<void> createFromConfig(
   Config flutterConfigs,
   bool generateSettings,
@@ -276,20 +277,17 @@ Future<void> createFromConfig(
     }
   } 
 }
-
+/// Get the file from the path specified
 String? getFirmware(String? location){
   if(location == null) return null;
   return File(path.join(location)).readAsStringSync();
 }
+/// Load the configurations from the yaml file selected
 Config? loadConfigFileFromYaml(String prefixPath) {
   final flutterLauncherIconsConfigs = Config.loadConfigFromPath(prefixPath) ?? Config.loadConfigFromPubSpec();
   return flutterLauncherIconsConfigs;
 }
-Config? loadConfigFileFromArgResults(ArgResults results) {
-  final flutterLauncherIconsConfigs = Config.loadConfigFromArgResults(results);
-  return flutterLauncherIconsConfigs;
-}
-
+/// Save file as bytes to location
 Future<void> saveBytes({
   required String printName,
   required String fileType,
@@ -299,6 +297,8 @@ Future<void> saveBytes({
 }) async {
   await File('$path/$printName.$fileType').writeAsBytes(bytes);
 }
+
+/// Save file as string to location
 Future<void> saveString({
   required String printName,
   required String fileType,

@@ -6,15 +6,24 @@ import 'package:json_annotation/json_annotation.dart';
   checked: true,
 )
 
+/// Application configuration
+/// 
+/// ```dart
+/// KeyFileConfig(
+///   generate, //set to true to generate new key file
+///   publicKey, //path to public key in c code or pem form
+///   privateKey //path to private key in pem form.
+/// };
+/// ```
 class KeyFileConfig {
   /// Specifies weather to generate siging key file
   final bool generate;
 
-  /// Image path to private key
+  /// Path to private key
   @JsonKey(name: 'private_key')
   final String? privateKey;
 
-  /// Image path to public key
+  /// Path to public key
   @JsonKey(name: 'private_key')
   final String? publicKey;
 
@@ -52,7 +61,7 @@ class KeyFileConfig {
       'private_key': privateKey,
     };
   }
-
+  /// Converts [KeyFileConfig] to [String]
   @override
   String toString() => 'KeyFileConfig: ${toJson()}';
 }

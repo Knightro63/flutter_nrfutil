@@ -3,10 +3,11 @@ import 'dart:io';
 
 import 'package:path/path.dart' as path;
 
+/// Print status
 void printStatus(String message) {
   print('• $message');
 }
-
+/// Generate custom error message
 String generateError(Exception e, String? error) {
   final errorOutput = error == null ? '' : ' \n$error';
   return '\n✗ ERROR: ${(e).runtimeType.toString()}$errorOutput';
@@ -46,5 +47,3 @@ String? areFSEntiesExist(List<String> paths) {
   }
   return null;
 }
-
-String flavorConfigFile(String flavor) => 'nrfutil-$flavor.yaml';
