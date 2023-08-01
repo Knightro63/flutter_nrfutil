@@ -1,5 +1,4 @@
 import 'package:cli_util/cli_logging.dart';
-
 export 'package:cli_util/cli_logging.dart' show Progress;
 
 NRFLogger? logger;

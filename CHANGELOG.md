@@ -1,3 +1,7 @@
+## 0.0.4
+
+* Added web functionality back.
+
 ## 0.0.3
 
 * Fixed: generating signing key file and signing validation. 

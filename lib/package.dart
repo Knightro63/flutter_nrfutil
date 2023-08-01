@@ -365,9 +365,9 @@ class NRFPackage{
     int crc = initVal;
     for (int byte in bytes) {
       crc ^= (byte << 8);
-      for (int i in bitRange) {
+      bitRange.forEach((element) { //for (int i in bitRange)
         crc = (crc & 0x8000) != 0 ? (crc << 1) ^ polynomial : crc << 1;
-      }
+      });
     }
     ByteData byteData = ByteData(2)..setInt16(0, crc, Endian.little);
     return byteData.buffer.asUint8List();
