@@ -213,7 +213,8 @@ class _NRFUtilWidgetState extends State<NRFUtilWidget> {
                   hardwareVersion: 52,
                   applicationVersion: 1,
                   keyFile: key,
-                  softDeviceReqType: sdReq
+                  softDeviceReqType: sdReq,
+                  verbose: true
                 ).generate().then((value){
                   SaveFile.saveBytes(printName: 'nrfutil_test', fileType: 'zip', bytes: value);
                 });
@@ -231,7 +232,8 @@ class _NRFUtilWidgetState extends State<NRFUtilWidget> {
                   hardwareVersion: 52,
                   bootloaderVersion: 1,
                   keyFile: key,
-                  softDeviceReqType: sdReq
+                  softDeviceReqType: sdReq,
+                  verbose: true
                 ).generate().then((value){
                   SaveFile.saveBytes(printName: 'nrfutil_test', fileType: 'zip', bytes: value);
                 });
@@ -248,7 +250,8 @@ class _NRFUtilWidgetState extends State<NRFUtilWidget> {
                   softDeviceFirmware: softDeviceFirmware,
                   hardwareVersion: 52,
                   keyFile: key,
-                  softDeviceReqType: sdReq
+                  softDeviceReqType: sdReq,
+                  verbose: true
                 ).generate().then((value){
                   SaveFile.saveBytes(printName: 'nrfutil_test', fileType: 'zip', bytes: value);
                 });
@@ -267,7 +270,8 @@ class _NRFUtilWidgetState extends State<NRFUtilWidget> {
                   hardwareVersion: 52,
                   applicationVersion: 1,
                   keyFile: key,
-                  softDeviceReqType: sdReq
+                  softDeviceReqType: sdReq,
+                  verbose: true
                 ).generate().then((value){
                   SaveFile.saveBytes(printName: 'nrfutil_test', fileType: 'zip', bytes: value);
                 });
@@ -305,7 +309,8 @@ class _NRFUtilWidgetState extends State<NRFUtilWidget> {
                   applicationVersion: 1,
                   hardwareVersion: 52,
                   keyFile: key,
-                  softDeviceReqType: sdReq
+                  softDeviceReqType: sdReq,
+                  verbose: true
                 ).generate().then((value){
                   SaveFile.saveBytes(printName: 'nrfutil_test', fileType: 'zip', bytes: value);
                 });

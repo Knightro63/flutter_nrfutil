@@ -148,8 +148,13 @@ class NRFUTIL{
     // this.manufacturerId = 0,
     // this.imageType = 0,
     this.comment,
+    this.verbose = false
   }){
     sofDeviceReq = sdTypeInt[softDeviceReqType.index];
+
+    if(verbose && logger ==  null){
+      logger = NRFLogger(verbose);
+    }
 
     if(signer == null){
       if(keyFile != null){
@@ -168,7 +173,7 @@ class NRFUTIL{
       this.signer = signer;
     }
   }
-
+  bool verbose;
   NRFUtilMode mode;
   int hardwareVersion;
   int applicationVersion;
