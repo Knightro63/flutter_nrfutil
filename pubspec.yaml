@@ -10,8 +10,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  archive: ^3.3.7
-  protobuf: ^3.0.0
+  archive: ^3.4.5
+  protobuf: ^3.1.0
   basic_utils: ^5.6.1
   crypto: ^3.0.3
   yaml: ^3.1.2
@@ -25,7 +25,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
+  flutter_lints: ^2.0.3
 
 false_secrets:
  - /lib/signing.dart

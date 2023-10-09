@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:args/args.dart';
+import 'package:nrfutil/terminal/logger.dart';
 
 const _defaultConfigFileName = './nrfutil.yaml';
 
@@ -38,17 +39,17 @@ void main(List<String> arguments) {
 
   // Check if fileName is valid and has a .yaml extension
   if (!fileName.endsWith('.yaml')) {
-    print('Invalid file name, please provide a valid file name');
+    logger?.error('Invalid file name, please provide a valid file name');
     return;
   }
 
   final file = File(fileName);
   if (file.existsSync()) {
     if (override) {
-      print('File already exists, overriding...');
+      logger?.warning('File already exists, overriding...');
       _generateConfigFile(file);
     } else {
-      print(
+      logger?.warning(
         'File already exists, use --override flag to override the file, or use --fileName flag to use a different file name',
       );
     }
@@ -57,7 +58,7 @@ void main(List<String> arguments) {
       file.createSync(recursive: true);
       _generateConfigFile(file);
     } on Exception catch (e) {
-      print('Error creating file: $e');
+      logger?.error('Error creating file: $e');
     }
   }
 }
@@ -66,14 +67,14 @@ void _generateConfigFile(File configFile) {
   try {
     configFile.writeAsStringSync(_configFileTemplate);
 
-    print('\nConfig file generated successfully 🎉');
-    print(
+    logger?.info('\nConfig file generated successfully 🎉');
+    logger?.info(
       'You can now use this new config file by using the command below:\n\n'
       'flutter pub run nrfutil'
       '${configFile.path == _defaultConfigFileName ? '' : ' -f ${configFile.path}'}\n',
     );
   } on Exception catch (e) {
-    print('Error generating config file: $e');
+    logger?.error('Error generating config file: $e');
   }
 }
 

@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:nrfutil/terminal/logger.dart';
 import 'package:path/path.dart' as path;
 
 /// Print status
 void printStatus(String message) {
-  print('• $message');
+  logger?.verbose('• $message');
 }
 /// Generate custom error message
 String generateError(Exception e, String? error) {
