@@ -17,7 +17,7 @@ To get started with nrfutil add the package to your pubspec.yaml file.
 
 ## Usage
 
-The nRF devices have different softdevices, be sure to select the correct softdevice from the enum list sofDeviceReqType. If a key file is not provided a default key will be used. DO NOT US THIS KEY IN YOUR FINAL PACKAGE. 
+The nRF devices have different softdevices, be sure to select the correct softdevice from the enum list softDeviceReqType. If a key file is not provided a default key will be used. DO NOT US THIS KEY IN YOUR FINAL PACKAGE. 
 
 A DFU package is able to consist of standalone firmware options e.g.(application, sofdevice, or bootloader) or combined options e.g.(application+softdevice+bootloader, application+sofdevice, or softdevice+bootloader). It is not able to make a application+bootloader. 
 
@@ -80,7 +80,7 @@ Uint8List package =  await Signing.generateKey();
 
 ## Example
 
-Find the example for this API [here](https://github.com/Knightro63/flutter_nrfutil/tree/main/example/nrfutil_example/lib/main.dart).
+Find the example for this API [here](https://github.com/Knightro63/flutter_nrfutil/tree/main/example/nrfutil_example/lib/main.dart) and the current web version of the code [here](https://knightro63.github.io/flutter_nrfutil/)..
 
 ## Contributing
 
@@ -91,4 +91,4 @@ In case of trivial fixes open a [pull request](https://github.com/Knightro63/flu
 
 ## Additional Information
 
-This plugin is only for creating the zip file for DFU, it does not have bluetooth in this library. If you also need to upload the created files use packages like flutter_blue and nordic_dfu. Zigbee is not supported.
+This plugin is only for creating the zip file for DFU, it does not have bluetooth in this library. If you also need to upload the created files use packages like flutter_blue_plus and nordic_dfu. Zigbee is not supported.
