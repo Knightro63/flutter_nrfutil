@@ -352,7 +352,7 @@ class NRFUTIL{
       archive.addFile(ArchiveFile('${fileNames[i]}.dat', pack.length, pack));
     }
     
-    archive.addFile(ArchiveFile('manifest.json', mani.length, mani));
+    archive.addFile(ArchiveFile('manifest.json', mani.length, utf8.encode(mani)));
     return NRFPackage.createZipFile(archive);
   }
 }
@@ -392,15 +392,15 @@ class NRFPackage{
     logger?.verbose("Archivng File!");
     
     ZipEncoder encoder = ZipEncoder();
-    OutputStream outputStream = OutputStream(
-      byteOrder: LITTLE_ENDIAN,
+    OutputStream outputStream = OutputMemoryStream(
+      byteOrder: ByteOrder.littleEndian,
     );
     List<int>? bytes = encoder.encode(
       archive,
-      level: Deflate.BEST_COMPRESSION, 
+      level: 9, 
       output: outputStream
     );
-    return Uint8List.fromList(bytes!);
+    return Uint8List.fromList(bytes);
   }
 
   // bool _isBootloaderSoftdeviceCombination(){

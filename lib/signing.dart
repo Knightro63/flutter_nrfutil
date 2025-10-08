@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:basic_utils/basic_utils.dart';
 import 'package:archive/archive_io.dart';
 import 'dart:typed_data';
@@ -114,31 +116,31 @@ class Signing{
     Archive archive = Archive();
     logger?.verbose('Creating private key.');
     String prk = CryptoUtils.encodeEcPrivateKeyToPem(pair.privateKey as ECPrivateKey);
-    archive.addFile(ArchiveFile('private.pem', prk.length, prk));
+    archive.addFile(ArchiveFile('private.pem', prk.length, utf8.encode(prk)));
     
     //if(publicKeyType == SigningKeyType.code){
       logger?.verbose('Creating public code key.');
       ECPublicKey ecpbk = pair.publicKey as ECPublicKey;
       pbkc = _generateCodeKey(ecpbk);
-      archive.addFile(ArchiveFile('public.c', pbkc.length, pbkc));
+      archive.addFile(ArchiveFile('public.c', pbkc.length, utf8.encode(pbkc)));
     //}
     //else{
       logger?.verbose('Creating public pem key.');
       pbkpem = CryptoUtils.encodeEcPublicKeyToPem(pair.publicKey as ECPublicKey);
-      archive.addFile(ArchiveFile('public.pem', pbkpem.length, pbkpem));
+      archive.addFile(ArchiveFile('public.pem', pbkpem.length, utf8.encode(pbkpem)));
     //}
     logger?.verbose('Archiving keys.');
     ZipEncoder encoder = ZipEncoder();
-    OutputStream outputStream = OutputStream(
-      byteOrder: LITTLE_ENDIAN,
+    OutputStream outputStream = OutputMemoryStream(
+      byteOrder: ByteOrder.littleEndian,
     );
     List<int>? bytes = encoder.encode(
       archive,
-      level: Deflate.BEST_COMPRESSION, 
+      level: 9, 
       output: outputStream
     );
     return SigningKeyData(
-      zipFile: Uint8List.fromList(bytes!),
+      zipFile: Uint8List.fromList(bytes),
       privateKey: prk,
       publicKeyCode: pbkc,
       publicKeyPem: pbkpem
